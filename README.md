@@ -1,4 +1,10 @@
 # node-postgress
+
+## CommandsTo Run
+
+yarn start
+yarn test
+
 ## DB Credentials
 POSTGRES_HOST = 127.0.0.1
 
