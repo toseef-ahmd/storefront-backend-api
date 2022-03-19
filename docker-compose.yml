@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   postgres:
-    image: postgres
+    image: storefront
     ports:
       - '5432:5432'
     env_file:
@@ -11,7 +11,7 @@ services:
       - 'postgres:/var/lib/postgresql/data'
 
   postgres-test:
-    image: postgres
+    image: storefront
     ports:
       - '5433:5432'
     env_file:
