@@ -1,3 +1,2 @@
 /* Replace with your SQL commands */
-
-DROP TABLE books;
+DROP TABLE users;
