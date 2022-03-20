@@ -18,7 +18,7 @@ export const index = async (req:Request, res: Response) : Promise<void> => {
 
 export const show = async (req: Request, res: Response) : Promise<void> => {
    try {
-    const product : User = await model.show(req.body.id)
+    const product : User = await model.show(parseInt(req.params.id))
     
     res.status(OK)
     res.json(product)
@@ -29,46 +29,32 @@ export const show = async (req: Request, res: Response) : Promise<void> => {
 }
 
 export const create = async (req: Request, res: Response) : Promise<void> => {
-    try {
-        const product: User = {
-            email : req.params.email,
-            password : req.params.password,
-            phone : req.params.phone,
-            username : req.params.username,
-        }
-
-        const newUser : User = await model.create(product)
-        
-        res.status(CREATED);
-        res.json(newUser)
-
-    } catch(err) {
-        res.status(400)
-        res.json(err)
+    const user: User = {
+        email : req.body.email,
+        password : req.body.password,
+        phone : req.body.phone,
+        username : req.body.username,
     }
+
+    const newUser : User = await model.create(user)
+
+    res.json(newUser)
 }
 
 export const destroy = async (req: Request, res: Response) : Promise<void> => {
-   try {
-    const deleted : User = await model.delete(req.body.id)
+    const deleted : User = await model.delete(parseInt(req.params.id))
     
-    res.status(OK)
     res.json(deleted)
-
-   } catch (error) {
-       res.status(NOT_FOUND)
-       res.json(error)
-   }
 }
 
 export const update = async (req: Request, res: Response) : Promise<void> => {
-   try {
-    const deleted = await model.delete(req.body.id)
+    const deleted = await model.delete(parseInt(req.params.id))
     
-    res.status(OK)
     res.json(deleted)
-   } catch (error) {
-        res.status(NOT_FOUND)
-        res.json(error)
-   }
+}
+
+export const authenticate = async (req:Request, res : Response) : Promise<void> => {
+    const user = await model.authenticate(req.body.email, req.body.password);
+
+    res.json(user);
 }
