@@ -4,18 +4,27 @@ import bcrypt from 'bcrypt'
 import { User } from "../interfaces/users.interface";
 
 export class UserModel {
-    async authenticate (email : string, password : string) : Promise<User> {
-        const sql : string = 'SELECT * FROM users WHERE email=$1'
-        const conn : PoolClient = await Client.connect();
-        const result : QueryResult<User> = await Client.query(sql, [email]);
-        const {rows} = result
-        
-       if (rows.length > 0) {
-        const user : User = rows[0];
-        const pepper : string = process.env.PASSWORD_HASH as string;
-        if(bcrypt.compareSync(password + pepper, user.password))
-
-       } 
+    async authenticate (email : string, password : string) : Promise<User | undefined> {
+        try {
+            const sql : string = 'SELECT * FROM users WHERE email=$1'
+            const conn : PoolClient = await Client.connect();
+            
+            const result : QueryResult<User> = await Client.query(sql, [email]);
+            const {rows} = result
+            
+            if (rows.length > 0) {
+                const user : User = rows[0];
+                const pepper : string = process.env.PASSWORD_HASH as string;
+                if(bcrypt.compareSync(password + pepper, user.password))
+                {
+                    return user;
+                }
+                   
+            }
+        } catch (error) {
+           throw new Error(`Not found, ${error}`) 
+        }
+          
     }
 
     async index () : Promise<User[]> {
