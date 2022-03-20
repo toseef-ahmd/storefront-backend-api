@@ -1,9 +1,12 @@
+
 import { PoolClient, QueryResult } from "pg";
+
 import Client from "../database/database";
 import bcrypt from 'bcrypt'
 import { User } from "../interfaces/users.interface";
 
 export class UserModel {
+
 
     async authenticate (email : string, password : string) : Promise<User | undefined> {
         try {
@@ -27,11 +30,10 @@ export class UserModel {
         }
           
     }
-
     async index () : Promise<User[]> {
         try {
-            const conn = await Client.connect();
-            const sql = 'SELECT * FROM users';
+            const conn : PoolClient = await Client.connect();
+            const sql : string = 'SELECT * FROM users';
             const result : QueryResult<User> = await conn.query(sql);
             conn.release()
 
@@ -61,11 +63,11 @@ export class UserModel {
       }
    }
 
-
     async show(id: number): Promise<User> {
         try {
-            const sql = 'SELECT * FROM users WHERE id=$1'
-            const conn = await Client.connect();
+            const sql : string = 'SELECT * FROM users WHERE id=$1'
+            const conn : PoolClient = await Client.connect();
+
             const result : QueryResult<User> = await conn.query(sql, [id]);
             conn.release();
             
@@ -78,8 +80,8 @@ export class UserModel {
 
     async delete(id : Number) : Promise<User> {
         try {
-            const sql = 'DELETE * FROM users WHERE id=($1)'
-            const conn = await Client.connect();
+            const sql : string = 'DELETE FROM users WHERE id=$1'
+            const conn : PoolClient = await Client.connect();
             const result : QueryResult<User> = await conn.query(sql, [id]);
             
             conn.release();
