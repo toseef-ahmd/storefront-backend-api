@@ -1,7 +1,7 @@
 import supertest from "supertest"
 
-import { ProductModel} from "../models/products.model";
-import { Product } from "../interfaces/products.interface";
+import { ProductModel} from "../../models/products.model";
+import { Product } from "../../interfaces/products.interface";
 
 const model = new ProductModel()
 
