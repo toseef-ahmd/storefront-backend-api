@@ -1,4 +1,4 @@
-import { Query, QueryResult } from "pg";
+import { PoolClient, QueryResult } from "pg";
 import Client from "../database/database"
 import {Product} from '../interfaces/products.interface'
 
@@ -49,12 +49,12 @@ export class ProductModel {
         }
     }
    
-    async delete(id:string) : Promise<Product>  {
+    async delete(id:number) : Promise<Product>  {
         try {
 
             const conn = await Client.connect();
             const sql = 'DELETE FROM products WHERE id=$1'
-            const result : QueryResult<Product> = await conn.query(sql, [parseInt(id)]);
+            const result : QueryResult<Product> = await conn.query(sql, [id]);
             conn.release();
 
             return result.rows[0];
@@ -64,20 +64,27 @@ export class ProductModel {
         }
     }
 
-// async update(id:string, prod : Product) : Promise<Product>  {
-//     try {
-//         const conn = await Client.connect();
-//         const sql = 'UPDATE * FROM products WHERE id=($1)'
-//         const result = await conn.query(sql, [id]);
-//         conn.release();
+    async update(id: number, product : JSON) : Promise<Product> {
+        const keys : string = Object.keys(product).join(',');
+        const values : string[] = Object.values(product);
+        
+        const indices : string = Object.keys(product).map((obj, index) => {
+            return '$'+(index+1);
+        }).join(',');
 
-//         return result.rows[0];
+        const sql : string = `UPDATE products SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`;
+        
+        try {
+            const conn : PoolClient = await Client.connect();
+            const result : QueryResult<Product> = await conn.query(sql, values);
 
-//     } catch (error) {
-//       throw new Error(`Cannot get prod ${error}`);
-//     }
-// }
+            conn.release();
 
+            return result.rows[0];
+        } catch (error) {
+            throw new Error(`Unable to Update: ${error}`)
+        }
+    }
 
 }
 

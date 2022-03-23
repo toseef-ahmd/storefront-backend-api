@@ -1,31 +1,21 @@
 import express, {Request, Response} from 'express'
 import { UserModel } from '../models/users.model'
 import { User } from '../interfaces/users.interface';
-import { CREATED, NOT_FOUND, OK } from 'http-status-codes';
+import jwt from 'jsonwebtoken'
+import { IsOwner } from '../middlewares/auth.middleware';
+
 const model = new UserModel();
 
 export const index = async (req:Request, res: Response) : Promise<void> => {
-    try {
-        const products : User[] = await model.index()
-        res.status(OK)
-        res.json(products);
-
-    } catch (error) {
-        res.status(NOT_FOUND)
-        res.json(error)
-    }
+    const users : User[] = await model.index()
+       
+    users ? res.json(users) : res.json({error : 'No records found.'});
 }
 
 export const show = async (req: Request, res: Response) : Promise<void> => {
-   try {
-    const product : User = await model.show(parseInt(req.params.id))
+    const user : User = await model.show(parseInt(req.params.id))
     
-    res.status(OK)
-    res.json(product)
-   } catch (error) {
-        res.status(NOT_FOUND)
-        res.json(error)
-   }
+    user ? res.json(user) : res.json({error: `No User Found with the id ${req.params.id}`})
 }
 
 export const create = async (req: Request, res: Response) : Promise<void> => {
@@ -37,24 +27,29 @@ export const create = async (req: Request, res: Response) : Promise<void> => {
     }
 
     const newUser : User = await model.create(user)
+    const token = jwt.sign({id : newUser.id}, process.env.JWT_SECRET as string)
 
-    res.json(newUser)
+    res.json({token: token})
 }
 
 export const destroy = async (req: Request, res: Response) : Promise<void> => {
+    
     const deleted : User = await model.delete(parseInt(req.params.id))
     
-    res.json(deleted)
+    deleted ? res.json({success: 'User Deleted successfully'}) : res.json({error: `No User Found with the id ${req.params.id}`})
 }
 
 export const update = async (req: Request, res: Response) : Promise<void> => {
-    const deleted = await model.delete(parseInt(req.params.id))
+    const temp : JSON= req.body as JSON
     
-    res.json(deleted)
+    const updated = await model.update(parseInt(req.params.id), temp);
+
+    updated ? res.json(updated) : res.json({error: `No User Found with the id ${req.params.id}`})
 }
 
 export const authenticate = async (req:Request, res : Response) : Promise<void> => {
+    
     const user = await model.authenticate(req.body.email, req.body.password);
 
-    res.json(user);
+    user ? res.json(user) : res.json({error : 'Something went wrong'});
 }

@@ -1,12 +1,13 @@
 import express  from "express";
 import {create, update, index, show, destroy} from '../controllers/products.controller'
+import { IsAuthenticated } from "../middlewares/auth.middleware";
 
 const products_route = (app: express.Application) : void => {
-    app.post('/products', create)
+    app.post('/products', IsAuthenticated, create)
     app.get('/products', index)
     app.get('/products/:id', show)
     app.delete('/products', destroy)
-    app.patch('/products', update)
+    app.patch('/products', IsAuthenticated, update)
 }
 
 export default products_route;
