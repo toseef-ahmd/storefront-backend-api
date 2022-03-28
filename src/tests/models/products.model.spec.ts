@@ -2,6 +2,7 @@ import supertest from "supertest"
 
 import { ProductModel} from "../../models/products.model";
 import { Product } from "../../interfaces/products.interface";
+import { DataObject } from "../../interfaces/common.interface";
 
 const model = new ProductModel()
 
@@ -27,48 +28,67 @@ describe("Product Model", () => {
   });
 
   it('Should add a Product', async () => {
-    const result: Product = await model.create({
-        title: "Harry Potter",
+    const result: DataObject = await model.create({
+        name: "Harry Potter",
         price: 100,
         category : 'Books',
-        details : 'This is a book'
       });
     
-    expect(result).toEqual({
+    expect(result.data).toEqual({
       id: 1,
-      title: "Harry Potter",
-      price: ('100' as unknown) as number,
+      name: "Harry Potter",
+      price: (100 as unknown) as number,
       category : 'Books',
-      details : 'This is a book'
     });
   });
 
   it('Should return a list of Products', async () => {
-    const result = await model.index();
-    expect(result).toEqual([{
+    const result : DataObject = await model.index();
+
+    expect(result.data).toEqual([{
         id: 1,
-        title: "Harry Potter",
-        price: ('100' as unknown) as number,
+        name: "Harry Potter",
+        price: (100 as unknown) as number,
         category : 'Books',
-        details : 'This is a book'
     }]);
   });
 
   it('Should return the correct Product', async () => {
     const result = await model.show("1");
-    expect(result).toEqual({
+    expect(result.data).toEqual({
         id: 1,
-        title: "Harry Potter",
-        price: ('100' as unknown) as number,
-        category : 'Books',
-        details : 'This is a book'
+        name: "Harry Potter",
+        price: (100 as unknown) as number,
+        category : 'Books'
     });
   });
 
-  it('Should remove the Product', async () => {
-    model.delete("1");
-    const result = await model.index()
+  it('Should Update the Product', async () => {
 
-    expect(result).toEqual([]);
+    const update : Object = {
+      "name" : "Updated Name",
+      "price" : 200
+    }
+    model.update(1, update as JSON);
+    const result : DataObject = await model.update(1, update as JSON)
+
+    expect(result.data).toEqual({
+      id: 1,
+      name: "Updated Name",
+      price: (200 as unknown) as number,
+      category : 'Books'
+  });
+  })
+  
+  it('Should remove the Product', async () => {
+    
+    const result : DataObject = await model.delete(1);
+
+    expect(result.data).toEqual({ 
+      id: 1, 
+      name: 'Updated Name', 
+      price: 200, 
+      category: 'Books' 
+    });
   })
 });

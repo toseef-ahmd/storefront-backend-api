@@ -1,40 +1,51 @@
+import { NOT_FOUND, OK } from "http-status-codes";
 import { PoolClient, QueryResult } from "pg";
 import Client from "../database/database"
+import { DataObject } from "../interfaces/common.interface";
 import {Product} from '../interfaces/products.interface'
 
 export class ProductModel {
-   async index() : Promise<Product[]> {
+   async index() : Promise<DataObject> {
         try {
             const connection = await Client.connect();
             const sql = 'SELECT * FROM products';
             const result : QueryResult<Product> = await connection.query(sql);
             connection.release();
             
-            return result.rows;
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows : {'error' : 'No Records found'},
+            }
+            return obj;
 
         } catch (error) {
             throw new Error(`Cannot get products ${error}`);
         }
     }
 
-    async create(prod:Product) : Promise<Product> {
+    async create(prod:Product) : Promise<DataObject> {
         try {
             
             const conn = await Client.connect();
            
-            const sql = 'INSERT INTO products (title, price, category, details) VALUES ($1, $2, $3, $4) RETURNING *';
-            const newprod = await conn.query(sql, [prod.title, prod.price, prod.category, prod.details]);
+            const sql = 'INSERT INTO products (name, price, category) VALUES ($1, $2, $3) RETURNING *';
+            const result = await conn.query(sql, [prod.name, prod.price, prod.category]);
             
             conn.release();
             
-            return newprod.rows[0];
+
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return obj;
     
         } catch (error) {
           throw new Error(`Cannot get product ${error}`);
         }
     }
 
-    async show(id:string) : Promise<Product>  {
+    async show(id:string) : Promise<DataObject>  {
         try {
             
             const conn = await Client.connect();
@@ -42,29 +53,62 @@ export class ProductModel {
             const result : QueryResult<Product> = await conn.query(sql, [parseInt(id)]);
             conn.release();
             
-            return result.rows[0];
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return obj;
+
+        } catch (error) {
+            throw new Error(`Cannot get product ${error}`);
+        }
+    }
+    async filter(params:string) : Promise<DataObject>  {
+
+        const keys : string = Object.keys(params).join(',')
+        const values : string[] = Object.values(params)
+        
+        const indices = Object.keys(params).map((obj, i) => {
+            return '$'+(i+1);
+        })
+        try {
+            
+            const conn = await Client.connect();
+            const sql = `SELECT * FROM products WHERE ${keys}=${indices}`;
+            const result : QueryResult<Product> = await conn.query(sql, [values]);
+            conn.release();
+            
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return obj;
 
         } catch (error) {
             throw new Error(`Cannot get product ${error}`);
         }
     }
    
-    async delete(id:number) : Promise<Product>  {
+    async delete(id:Number) : Promise<DataObject>  {
         try {
-
-            const conn = await Client.connect();
-            const sql = 'DELETE FROM products WHERE id=$1'
+            const sql : string = 'DELETE FROM products WHERE id=$1 RETURNING *'
+            const conn : PoolClient = await Client.connect();
             const result : QueryResult<Product> = await conn.query(sql, [id]);
+
             conn.release();
 
-            return result.rows[0];
+            const data : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return data; 
 
         } catch (error) {
-        throw new Error(`Cannot get product ${error}`);
+            throw new Error(`Unable to Delete: ${error}`)
         }
     }
 
-    async update(id: number, product : JSON) : Promise<Product> {
+    async update(id: number, product : JSON) : Promise<DataObject> {
         const keys : string = Object.keys(product).join(',');
         const values : string[] = Object.values(product);
         
@@ -79,8 +123,12 @@ export class ProductModel {
             const result : QueryResult<Product> = await conn.query(sql, values);
 
             conn.release();
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return obj;
 
-            return result.rows[0];
         } catch (error) {
             throw new Error(`Unable to Update: ${error}`)
         }

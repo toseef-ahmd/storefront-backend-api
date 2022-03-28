@@ -6,8 +6,8 @@ const products_route = (app: express.Application) : void => {
     app.post('/products', IsAuthenticated, create)
     app.get('/products', index)
     app.get('/products/:id', show)
-    app.delete('/products', destroy)
-    app.patch('/products', IsAuthenticated, update)
+    app.delete('/products/:id', IsAuthenticated, destroy)
+    app.put('/products/:id', IsAuthenticated, update)
 }
 
 export default products_route;

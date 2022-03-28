@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, response } from "express";
+import { METHOD_NOT_ALLOWED } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { use } from "vue/types/umd";
 import { User } from "../interfaces/users.interface";
@@ -14,6 +15,7 @@ export const IsAuthenticated = (req: Request, res : Response, next : NextFunctio
 
         return next()
     } catch (error) {
+        res.status(METHOD_NOT_ALLOWED)
         return res.json({error: 'JWT token not provided. Please provide a valid JWT'})
     }
 }

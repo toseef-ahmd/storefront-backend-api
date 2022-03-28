@@ -4,15 +4,17 @@ import { PoolClient, QueryResult } from "pg";
 import Client from "../database/database";
 import bcrypt from 'bcrypt'
 import { User } from "../interfaces/users.interface";
-import jwt from "jsonwebtoken";
+
+import { NOT_FOUND, OK } from "http-status-codes";
+import { DataObject } from "../interfaces/common.interface";
 
 export class UserModel {
-    async authenticate (email : string, password : string) : Promise<User | null> {
+    async authenticate (username : string, password : string) : Promise<Object> {
         try {
-            const sql : string = 'SELECT * FROM users WHERE email=$1'
+            const sql : string = 'SELECT id, username, firstname, lastname FROM users WHERE username=$1'
             const conn : PoolClient = await Client.connect();
             
-            const result : QueryResult<User> = await Client.query(sql, [email]);
+            const result : QueryResult<User> = await Client.query(sql, [username]);
             const {rows} = result
             
             if (rows.length > 0) {
@@ -20,63 +22,89 @@ export class UserModel {
                 const pepper : string = process.env.PASSWORD_HASH as string;
                 const user : User = rows[0];
                
-                console.log(password+pepper);
-                
-                
-                if(bcrypt.compareSync(password + pepper, user.password))
+                if(!bcrypt.compareSync(password + pepper, user.password_digest))
                 {
-                    return user;
-                }   
+                    const error : Object = {
+                        "status" : NOT_FOUND,
+                        "data" : "Incorrect Password",
+                    }
+                    return Object(error);
+                }
+
+                const result : Object = {
+                    "status" : OK,
+                    "data" : user,
+                }
+                return Object(result);
             }
-            return null; 
+            const error : Object = {
+                "status" : NOT_FOUND,
+                "data" : "No User found with this Username",
+            }
+            return Object(error); 
         } catch (error) {
            throw new Error(`Not found, ${error}`) 
         }
           
     }
 
-    async index () : Promise<User[]> {
+    async index () : Promise<DataObject> {
         try {
             const conn : PoolClient = await Client.connect();
-            const sql : string = 'SELECT * FROM users';
+            const sql : string = 'SELECT id, username, firstname, lastname FROM users';
             const result : QueryResult<User> = await conn.query(sql);
             conn.release()
 
-            return result.rows;
+            const data : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows : {'error' : 'No Records found'},
+            }
+            return data;
 
         } catch (error) {
             throw new Error(`Unable to find Results: ${error}`)
         }
     }
 
-    async  create(user:User) : Promise<User> {
+    async  create(user:User) : Promise<DataObject> {
       try {
         const conn = await Client.connect();
         
-        const sql = 'INSERT INTO users (email, password, phone, username) VALUES ($1, $2, $3, $4) RETURNING *'
+        const sql = 'INSERT INTO users (username, password_digest, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING id, username, firstname, lastname'
         const pepper : string = process.env.PASSWORD_HASH as string
         
         const hashSteps = process.env.SALT_ROUNDS as string
-        const hash = bcrypt.hashSync(user.password + pepper, parseInt(hashSteps));
+        const hash = bcrypt.hashSync(user.password_digest + pepper, parseInt(hashSteps));
 
-        const result : QueryResult<User> = await conn.query(sql, [user.email, hash, user.phone, user.username]);
+        const result : QueryResult<User> = await conn.query(sql, [user.username, hash, user.firstname, user.lastname]);
+
+        
         conn.release();
         
-        return result.rows[0];
+        const obj : DataObject = {
+            status : result.rows.length > 0 ? OK : NOT_FOUND,
+            data : result.rows.length > 0 ? result.rows[0] : {'error' : 'Unable to Create'}
+        }
+        return obj;
+
       } catch (error) {
         throw new Error(`Unable to find Results: ${error}`)
       }
    }
 
-    async show(id: number): Promise<User> {
+    async show(id: number): Promise<DataObject> {
         try {
-            const sql : string = 'SELECT * FROM users WHERE id=$1'
+            const sql : string = 'SELECT id, username, firstname, lastname FROM users WHERE id=$1'
             const conn : PoolClient = await Client.connect();
 
             const result : QueryResult<User> = await conn.query(sql, [id]);
             conn.release();
             
-            return result.rows[0]; 
+            const data : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return data; 
             
 
         } catch (error) {
@@ -84,21 +112,26 @@ export class UserModel {
         }
     }
 
-    async delete(id : Number) : Promise<User> {
+    async delete(id : Number) : Promise<DataObject> {
         try {
-            const sql : string = 'DELETE FROM users WHERE id=$1 RETURNING *'
+            const sql : string = 'DELETE FROM users WHERE id=$1 RETURNING id, username, firstname, lastname'
             const conn : PoolClient = await Client.connect();
             const result : QueryResult<User> = await conn.query(sql, [id]);
 
             conn.release();
 
-            return result.rows[0];
+            const data : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return data; 
+
         } catch (error) {
             throw new Error(`Unable to Delete: ${error}`)
         }
     }
 
-    async update(id: number, user : JSON) : Promise<User> {
+    async update(id: number, user : JSON) : Promise<DataObject> {
         const keys : string = Object.keys(user).join(',');
         const values : string[] = Object.values(user);
         
@@ -106,16 +139,37 @@ export class UserModel {
             return '$'+(index+1);
         }).join(',');
 
-        const sql : string = `UPDATE users SET (${keys})=(${indices}) where id=${id} RETURNING *`;
-        
-        try {            
+        const sql : string = `UPDATE users SET (${keys})=(${indices}) WHERE id=${id} RETURNING id, username, firstname, lastname`;
+       
+        try {
             const conn : PoolClient = await Client.connect();
             const result : QueryResult<User> = await conn.query(sql, values);
-
+            
+            
             conn.release();
+            const obj : DataObject = {
+                status :  result.rows.length> 0 ? OK : NOT_FOUND,
+                data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
+            }
+            return obj;
 
-            return result.rows[0];
         } catch (error) {
+            throw new Error(`Unable to Update: ${error}`)
+        }
+    }
+
+    async clean () : Promise<boolean> {
+        const sql : string = 'TRUNCATE TABLE users RESTART IDENTITY CASCADE';
+        try {
+            const conn : PoolClient = await Client.connect();
+            const result : QueryResult<User> = await conn.query(sql);
+            
+            conn.release();
+           
+            return true;
+
+        } catch (error) {
+            
             throw new Error(`Unable to Update: ${error}`)
         }
     }

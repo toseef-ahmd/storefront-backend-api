@@ -1,8 +1,7 @@
-/* Replace with your SQL commands */
-CREATE TABLE users(
-    email VARCHAR(255), 
-    password VARCHAR(255), 
-    phone VARCHAR(55), 
-    username VARCHAR(255), 
-    ID SERIAL PRIMARY KEY
+CREATE TABLE users (
+  ID              SERIAL PRIMARY KEY,
+  username        VARCHAR(250) NOT NULL,
+  firstname       VARCHAR(250) NOT NULL,
+  lastname        VARCHAR(250) NOT NULL,
+  password_digest VARCHAR(250) NOT NULL
 );

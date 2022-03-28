@@ -6,7 +6,7 @@ const orders_route = (app : express.Application) : void => {
     app.get('/orders', index);
     app.get('/orders/:id', IsAuthenticated, show);
     app.post('/orders/', IsAuthenticated, create);
-    app.patch('/orders/:id', IsAuthenticated,  update)
+    app.patch('/orders/:id', IsAuthenticated, update)
     app.delete('/orders/:id', IsAuthenticated, destroy)
     app.post('/orders/:id/products', IsAuthenticated, addProducts)
 }

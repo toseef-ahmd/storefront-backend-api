@@ -1,7 +1,6 @@
 CREATE TABLE products (
-    title VARCHAR(255), 
-    price NUMERIC NOT NULL, 
-    category VARCHAR(255), 
-    details TEXT, 
-    ID SERIAL PRIMARY KEY
-    );
+    ID SERIAL PRIMARY KEY,
+    name  VARCHAR(250) NOT NULL,
+    price INTEGER NOT NULL,
+    category VARCHAR(255) NOT NULL
+);
