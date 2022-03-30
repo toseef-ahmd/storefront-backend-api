@@ -2,8 +2,9 @@ import supertest from "supertest";
 import jwt, { Secret } from "jsonwebtoken";
 import { app } from "../../server";
 import { User } from "../../interfaces/users.interface";
+import { UserModel } from "../../models/users.model";
 
-const request : supertest.SuperTest<supertest.Test> = supertest(app);
+const request = supertest(app);
 
 const JWT_SECRET : Secret = process.env.JWT_SECRET as Secret
 
@@ -16,16 +17,32 @@ describe('Users Controller', () => {
     }
 
     let _id : number;
-    let token : string;
+    let _token : string; // = process.env.token as string;
 
-    
-    afterAll(async () => {
+    beforeAll(async () => {
+        
+        const result2 = await request.delete('/users');
+        const user : User = {
+            firstname : 'tauseef',
+            lastname : 'Ahmed',
+            username : 'tasueefAhmed',
+            password_digest : 'hello123'
+        }
 
-        await request.delete('/users');
+        const result = await request.post('/users').send(user);
 
+
+        const {token} =  result.body
+        _token = token;
+        console.log("token: ", _token)
     })
 
-    it('Should Return error if Auth Token is missing', () => {
+    afterAll(async()=> {
+        await request.delete('/users');
+        
+    })
+
+    it('Should Return error if Auth Token is missing',  () => {
         request.get('/users').then((res)=> {
             expect(res.status).toBe(405);
         })
@@ -34,7 +51,7 @@ describe('Users Controller', () => {
             expect(res.status).toBe(405);
         })
 
-        request.patch('/users/1')
+        request.put('/users/1')
         .send({
             firstname : user.firstname+'update',
             lastname : user.lastname+'update'
@@ -48,64 +65,49 @@ describe('Users Controller', () => {
         })
     })
 
-    it('Should return a token as a new token is created', () => {
-        request.post('/users')
-        .send({user})
-        .then((res)=> {
-            token  = res.body;
-            
-            const data = jwt.verify(token, JWT_SECRET);
-            let temp;
-            for (let [key, value] of Object.entries(data)) {
-            if(key==='id') {_id = value}
-        }
+    it('Should create a new user', async () => {
+        const response = await request.post('/users').send(user);
 
-            console.log(_id);
-            expect((res.status)).toBe(200);
-        })
+        expect(response.status).toBe(200);
+
     })
 
-    it('Gets Users list', () => {
-        request.get('/users').set("Authorization", "bearer "+ token)
-        .then((res)=> {
-            
-            expect(res.status).toBe(200);
-        })
-    })
-    
-    it('Gets specific User ', () => {
-        request.get(`/users/${_id}`).set("Authorization", "bearer "+ token)
-        .then((res)=> {
-            expect(res.status).toBe(200);
-        })
+    it('Gets Users list', async() => {
+        const response = await request.get('/users')
+        .set('Authorization', 'Bearer '+ _token)
+        
+        expect(response.status).toBe(200);
     })
 
-    it('Should Update the User', () => {
-        request.put(`/users/${_id}`).set('Authorization', "bearer "+ token)
+    it('Gets specific User ', async() => {
+        const response = await request.get('/users/1')
+        .set('Authorization', 'Bearer '+ _token)
+        
+        expect(response.status).toBe(200);
+     })
+
+     it('Should Update the User', async() => {
+        const response = await request.put('/users/1')
         .send({
-            firstname : "newFirstName",
-            lastname : "newLastName"        
+            username : 'Updated Name'
         })
-        .then((res) => {
-            expect(res.status).toBe(200);
-        })
+        .set('Authorization', 'Bearer '+ _token)
+        
+        expect(response.status).toBe(200);
     })
-    
-    it('Should return error if login information is incorrect', () => {
-        request.get('/users/authenticate').set('Authorization', "bearer "+ token)
-        .send({
-            username: user.username,
-            password : 'wrongpassword'
-        })
-        .then((res) => {
-            expect(res.status).toBe(404);
-        })
+
+    it('Should return error if login information is incorrect', async() => {
+        const response = await request.get('/users/authenticate')
+        .set('Authorization',  'Bearer '+ _token)
+        
+        expect(response.status).toBe(404);
     })
-    it('Should Delete the User', () => {
-        request.delete(`/users/${_id}`).set('Authorization',  "bearer "+ token)
-        .then((res)=> {
-            expect(res.status).toBe(200);
-        })
+
+    it('Should Delete the User', async() => {
+        const response = await request.delete('/users/1')
+        .set('Authorization', 'Bearer '+ _token)
+        
+        expect(response.status).toBe(200);
      }) 
 })
 

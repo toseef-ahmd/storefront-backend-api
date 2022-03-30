@@ -7,6 +7,7 @@ import { OrdersModel } from "../models/orders.model";
 
 const ordersModel : OrdersModel = new OrdersModel();
 
+const token = process.env.JWT_TOKEN
 export const index = async (req : Request, res: Response) : Promise<void> => {
     try {
         const orders : DataObject = await ordersModel.index();
@@ -36,6 +37,7 @@ export const create = async (req: Request, res : Response) => {
 export const show = async (req: Request, res : Response) : Promise<void> => {
 
     try {
+        console.log(req.params.id);
         const order : DataObject = await ordersModel.show(parseInt(req.params.id));
 
         res.status(order.status)
@@ -48,7 +50,7 @@ export const show = async (req: Request, res : Response) : Promise<void> => {
 
 export const update = async (req: Request, res : Response) : Promise<void> => {
     try {
-        const _order : JSON = req.body as JSON;
+        const _order : Object = req.body as Object;
         const order : DataObject = await ordersModel.update(parseInt(req.params.id), _order);
 
         res.status(order.status)
@@ -86,6 +88,21 @@ export const addProducts = async (req: Request, res : Response) => {
 
     } catch (error) {
         res.status(400)
+        res.json(error)
+    }
+
+}
+
+export const clean = async (req: Request, res: Response) => {
+    
+    try {
+        const deleted : boolean = await ordersModel.clean();
+        
+        res.status(200)
+        res.json({'deleted': deleted});
+
+    } catch (error) {
+        res.status(NOT_FOUND);
         res.json(error)
     }
 

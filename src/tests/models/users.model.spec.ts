@@ -69,7 +69,6 @@ describe("Users Model", () => {
     const update : Object = {
       "username" : "UpdatedName",
     }
-    model.update(2, update as JSON);
     const result : DataObject = await model.update(1, update as JSON)
 
     expect(result.data).toEqual({

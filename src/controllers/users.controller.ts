@@ -7,7 +7,7 @@ import { NOT_FOUND } from 'http-status-codes';
 
 const model = new UserModel();
 
-export const index = async (req:Request, res: Response) : Promise<void> => {
+export const index = async (req:Request, res: Response) => {
     try {
         const users : DataObject = await model.index()
         
@@ -20,7 +20,7 @@ export const index = async (req:Request, res: Response) : Promise<void> => {
    }
 }
 
-export const show = async (req: Request, res: Response) : Promise<void> => {
+export const show = async (req: Request, res: Response)  => {
     try {
         const user : DataObject = await model.show(parseInt(req.params.id))
         
@@ -32,12 +32,12 @@ export const show = async (req: Request, res: Response) : Promise<void> => {
     }
 }
 
-export const create = async (req: Request, res: Response) : Promise<void> => {
+export const create = async (req: Request, res: Response)  => {
     const user: User = {
-        firstname : req.body.firstname,
-        lastname : req.body.lastname,
-        password_digest : req.body.password,
-        username : req.body.username,
+        firstname : req.body.firstname as string,
+        lastname : req.body.lastname as string,
+        password_digest : req.body.password_digest as string,
+        username : req.body.username as string,
     }
 
     try {
@@ -45,7 +45,6 @@ export const create = async (req: Request, res: Response) : Promise<void> => {
     
         const {status, data} = newUser
     
-        
         let _id;
         for (let [key, value] of Object.entries(data)) {
             if(key==='id') {_id = value}
@@ -62,7 +61,7 @@ export const create = async (req: Request, res: Response) : Promise<void> => {
     }
 }
 
-export const destroy = async (req: Request, res: Response) : Promise<void> => {
+export const destroy = async (req: Request, res: Response)  => {
     
     try {
         const deleted : DataObject = await model.delete(parseInt(req.params.id))
@@ -76,9 +75,9 @@ export const destroy = async (req: Request, res: Response) : Promise<void> => {
 
 }
 
-export const update = async (req: Request, res: Response) : Promise<void> => {
+export const update = async (req: Request, res: Response)=> {
     try {
-        const temp : JSON= req.body as JSON
+        const temp : Object= req.body as Object
         
         const updated : DataObject = await model.update(parseInt(req.params.id), temp);
 
@@ -91,7 +90,7 @@ export const update = async (req: Request, res: Response) : Promise<void> => {
     
 }
 
-export const authenticate = async (req:Request, res : Response) : Promise<void> => {
+export const authenticate = async (req:Request, res : Response)  => {
     try {
         const result : DataObject = await model.authenticate(req.body.username, req.body.password) as DataObject;
        
@@ -104,7 +103,7 @@ export const authenticate = async (req:Request, res : Response) : Promise<void> 
     }
 }
 
-export const clean = async (req: Request, res: Response) : Promise<void> => {
+export const clean = async (req: Request, res: Response) => {
     
     try {
         const deleted : boolean = await model.clean();

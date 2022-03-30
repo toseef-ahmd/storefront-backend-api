@@ -108,7 +108,7 @@ export class ProductModel {
         }
     }
 
-    async update(id: number, product : JSON) : Promise<DataObject> {
+    async update(id: number, product : Object) : Promise<DataObject> {
         const keys : string = Object.keys(product).join(',');
         const values : string[] = Object.values(product);
         
@@ -130,6 +130,23 @@ export class ProductModel {
             return obj;
 
         } catch (error) {
+            throw new Error(`Unable to Update: ${error}`)
+        }
+    }
+
+
+    async clean () : Promise<boolean> {
+        const sql : string = 'TRUNCATE TABLE products RESTART IDENTITY CASCADE';
+        try {
+            const conn : PoolClient = await Client.connect();
+            const result : QueryResult<Product> = await conn.query(sql);
+            
+            conn.release();
+           
+            return true;
+
+        } catch (error) {
+            
             throw new Error(`Unable to Update: ${error}`)
         }
     }

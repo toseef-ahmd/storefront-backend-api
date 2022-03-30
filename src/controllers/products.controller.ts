@@ -6,7 +6,7 @@ import { DataObject } from '../interfaces/common.interface';
 
 const model : ProductModel = new ProductModel();
 
-export const index = async (req:Request, res: Response) : Promise<void> => {
+export const index = async (req:Request, res: Response) => {
     try {
         const products : DataObject = await model.index();
         
@@ -18,7 +18,7 @@ export const index = async (req:Request, res: Response) : Promise<void> => {
     }
 }
 
-export const show = async (req: Request, res: Response) : Promise<void> => {
+export const show = async (req: Request, res: Response)  => {
     try {
         const product : DataObject = await model.show(req.params.id)
         
@@ -30,7 +30,7 @@ export const show = async (req: Request, res: Response) : Promise<void> => {
     }
 }
 
-export const create = async (req: Request, res: Response) : Promise<void> => {
+export const create = async (req: Request, res: Response)  => {
      //console.log('request: ', req)
     const product: Product = {
         name : req.body.name,
@@ -49,7 +49,7 @@ export const create = async (req: Request, res: Response) : Promise<void> => {
     }
 }
 
-export const destroy = async (req: Request, res: Response) : Promise<void> => {
+export const destroy = async (req: Request, res: Response)  => {
     try {
         const deleted : DataObject = await model.delete(parseInt(req.params.id))
         res.status(deleted.status)
@@ -61,10 +61,10 @@ export const destroy = async (req: Request, res: Response) : Promise<void> => {
     }
 }
 
-export const update = async (req: Request, res: Response) : Promise<void> => {
+export const update = async (req: Request, res: Response)  => {
     try {
-        const product : JSON = req.body as JSON;
-        const updated = await model.update(parseInt(req.params.id), product)
+        const product : Object = req.body as Object;
+        const updated : DataObject = await model.update(parseInt(req.params.id), product)
         
         res.status(updated.status)
         res.json(updated.data);
@@ -73,4 +73,19 @@ export const update = async (req: Request, res: Response) : Promise<void> => {
         res.status(NOT_FOUND);
         res.json(error)
     }
+}
+
+export const clean = async (req: Request, res: Response)  => {
+    
+    try {
+        const deleted : boolean = await model.clean();
+        
+        res.status(200)
+        res.json({'deleted': deleted});
+
+    } catch (error) {
+        res.status(NOT_FOUND);
+        res.json(error)
+    }
+
 }

@@ -47,7 +47,7 @@ export class OrdersModel {
     async show(id:number) : Promise<DataObject>  {
         try {
             const conn : PoolClient = await Client.connect();
-            const sql : string = 'SELECT * FROM orsders WHERE id = $1';
+            const sql : string = 'SELECT * FROM orders WHERE id = $1';
 
             const result : QueryResult<Order> = await conn.query(sql, [id]);
 
@@ -62,20 +62,22 @@ export class OrdersModel {
         }
     }
 
-    async update (id : number, order:JSON) : Promise<DataObject> {
-        const keys : string = Object.keys(order).join(', ');
+    async update (id : number, order:Object) : Promise<DataObject> {
+        const keys : string = Object.keys(order).join(',');
+
         const values : string[] = Object.values(order);
 
         const indices = Object.keys(order).map((obj, index) => {
             return '$'+(index+1)
-        }).join(', ');
+        }).join(',');
 
         try {
             const conn : PoolClient = await Client.connect();
-            const sql : string = `UPDATE orders set (${keys}) = (${indices}) WHERE id=${id}`;
+            const sql : string = `UPDATE orders SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`;
 
             const result : QueryResult<Order> = await conn.query(sql, values);
 
+            console
             const data : DataObject = {
                 status :  result.rows.length> 0 ? OK : NOT_FOUND,
                 data : result.rows.length> 0 ? result.rows[0] : {'error' : 'No Records found'},
@@ -124,6 +126,22 @@ export class OrdersModel {
 
         } catch (error) {
             throw new Error(`Cannot add products to order ${error}`);
+        }
+    }
+
+    async clean () : Promise<boolean> {
+        const sql : string = 'TRUNCATE TABLE orders RESTART IDENTITY CASCADE';
+        try {
+            const conn : PoolClient = await Client.connect();
+            const result : QueryResult<Order> = await conn.query(sql);
+            
+            conn.release();
+           
+            return true;
+
+        } catch (error) {
+            
+            throw new Error(`Unable to Update: ${error}`)
         }
     }
 } 

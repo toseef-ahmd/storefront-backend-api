@@ -17,7 +17,7 @@ export const orderItems = async (_req: Request, res: Response) => {
 
 export const usersOrders = async (_req: Request, res: Response) => {
     try {
-        console.log(_req);
+        //console.log(_req);
         const _orders = await dashboard.userOrders();
         res.json(_orders);
 

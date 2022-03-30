@@ -131,7 +131,7 @@ export class UserModel {
         }
     }
 
-    async update(id: number, user : JSON) : Promise<DataObject> {
+    async update(id: number, user : Object) : Promise<DataObject> {
         const keys : string = Object.keys(user).join(',');
         const values : string[] = Object.values(user);
         
