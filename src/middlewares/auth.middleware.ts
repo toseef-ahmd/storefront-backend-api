@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction, response } from "express";
 import { METHOD_NOT_ALLOWED } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { use } from "vue/types/umd";
 import { User } from "../interfaces/users.interface";
 import { UserModel } from "../models/users.model";
 
