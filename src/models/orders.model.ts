@@ -53,7 +53,7 @@ export class OrdersModel {
   async show(id: number): Promise<DataObject> {
     try {
       const conn: PoolClient = await Client.connect()
-      const sql: string = "SELECT * FROM orders WHERE id = $1"
+      const sql = "SELECT * FROM orders WHERE id = $1"
 
       const result: QueryResult<Order> = await conn.query(sql, [id])
 
@@ -70,7 +70,7 @@ export class OrdersModel {
     }
   }
 
-  async update(id: number, order: Object): Promise<DataObject> {
+  async update(id: number, order: JSON): Promise<DataObject> {
     const keys: string = Object.keys(order).join(",")
 
     const values: string[] = Object.values(order)

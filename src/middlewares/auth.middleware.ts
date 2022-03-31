@@ -1,21 +1,12 @@
-<<<<<<< HEAD
-import { Request, Response, NextFunction } from "express"
-import { METHOD_NOT_ALLOWED } from "http-status-codes"
-import jwt, { JwtPayload } from "jsonwebtoken"
-=======
-import { Request, Response, NextFunction, response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { METHOD_NOT_ALLOWED } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../interfaces/users.interface";
-import { UserModel } from "../models/users.model";
->>>>>>> 2b5d7c8571c385689df540c033850c0a5bbcd8e6
-
 
 export const IsAuthenticated = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) : Response | void => {
   try {
     const authHeader = req.headers.authorization
     const token: string = authHeader?.split(" ")[1] as string
@@ -30,7 +21,7 @@ export const IsAuthenticated = (
   }
 }
 
-export const IsOwner = (req: Request, res: Response, next: NextFunction) => {
+export const IsOwner = (req: Request, res: Response, next: NextFunction) : Response | void => {
   try {
     const authHeader = req.headers.authorization
     const token: string = authHeader?.split(" ")[1] as string
