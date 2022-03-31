@@ -1,6 +1,8 @@
+
 import { Request, Response, NextFunction } from "express";
 import { METHOD_NOT_ALLOWED } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
+
 
 export const IsAuthenticated = (
   req: Request,
