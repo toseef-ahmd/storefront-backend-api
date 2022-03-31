@@ -1,117 +1,114 @@
-import supertest from "supertest";
-import jwt, { Secret } from "jsonwebtoken";
-import { app } from "../../server";
-import { User } from "../../interfaces/users.interface";
-import { UserModel } from "../../models/users.model";
+import supertest from "supertest"
+import jwt, { Secret } from "jsonwebtoken"
+import { app } from "../../server"
+import { User } from "../../interfaces/users.interface"
+import { UserModel } from "../../models/users.model"
 
-const request = supertest(app);
+const request = supertest(app)
 
-const JWT_SECRET : Secret = process.env.JWT_SECRET as Secret
+const JWT_SECRET: Secret = process.env.JWT_SECRET as Secret
 
-describe('Users Controller', () => {
-    const user : User = {
-        firstname : 'tauseef',
-        lastname : 'ahmed',
-        username : 'tasueefAhmed',
-        password_digest : 'hello123'
+describe("Users Controller", () => {
+  const user: User = {
+    firstname: "tauseef",
+    lastname: "ahmed",
+    username: "tasueefAhmed",
+    password_digest: "hello123",
+  }
+
+  let _id: number
+  let _token: string // = process.env.token as string;
+
+  beforeAll(async () => {
+    const result2 = await request.delete("/users")
+    const user: User = {
+      firstname: "tauseef",
+      lastname: "Ahmed",
+      username: "tasueefAhmed",
+      password_digest: "hello123",
     }
 
-    let _id : number;
-    let _token : string; // = process.env.token as string;
+    const result = await request.post("/users").send(user)
 
-    beforeAll(async () => {
-        
-        const result2 = await request.delete('/users');
-        const user : User = {
-            firstname : 'tauseef',
-            lastname : 'Ahmed',
-            username : 'tasueefAhmed',
-            password_digest : 'hello123'
-        }
+    const { token } = result.body
+    _token = token
+    console.log("token: ", _token)
+  })
 
-        const result = await request.post('/users').send(user);
+  afterAll(async () => {
+    await request.delete("/users")
+  })
 
-
-        const {token} =  result.body
-        _token = token;
-        console.log("token: ", _token)
+  it("Should Return error if Auth Token is missing", () => {
+    request.get("/users").then((res) => {
+      expect(res.status).toBe(405)
     })
 
-    afterAll(async()=> {
-        await request.delete('/users');
-        
+    request.get("/users/1").then((res) => {
+      expect(res.status).toBe(405)
     })
 
-    it('Should Return error if Auth Token is missing',  () => {
-        request.get('/users').then((res)=> {
-            expect(res.status).toBe(405);
-        })
+    request
+      .put("/users/1")
+      .send({
+        firstname: user.firstname + "update",
+        lastname: user.lastname + "update",
+      })
+      .then((res) => {
+        expect(res.status).toBe(405)
+      })
 
-        request.get('/users/1').then((res)=> {
-            expect(res.status).toBe(405);
-        })
-
-        request.put('/users/1')
-        .send({
-            firstname : user.firstname+'update',
-            lastname : user.lastname+'update'
-        })
-        .then((res)=> {
-            expect(res.status).toBe(405);
-        })
-
-        request.delete('/users/1').then((res)=> {
-            expect(res.status).toBe(405);
-        })
+    request.delete("/users/1").then((res) => {
+      expect(res.status).toBe(405)
     })
+  })
 
-    it('Should create a new user', async () => {
-        const response = await request.post('/users').send(user);
+  it("Should create a new user", async () => {
+    const response = await request.post("/users").send(user)
 
-        expect(response.status).toBe(200);
+    expect(response.status).toBe(200)
+  })
 
-    })
+  it("Gets Users list", async () => {
+    const response = await request
+      .get("/users")
+      .set("Authorization", "Bearer " + _token)
 
-    it('Gets Users list', async() => {
-        const response = await request.get('/users')
-        .set('Authorization', 'Bearer '+ _token)
-        
-        expect(response.status).toBe(200);
-    })
+    expect(response.status).toBe(200)
+  })
 
-    it('Gets specific User ', async() => {
-        const response = await request.get('/users/1')
-        .set('Authorization', 'Bearer '+ _token)
-        
-        expect(response.status).toBe(200);
-     })
+  it("Gets specific User ", async () => {
+    const response = await request
+      .get("/users/1")
+      .set("Authorization", "Bearer " + _token)
 
-     it('Should Update the User', async() => {
-        const response = await request.put('/users/1')
-        .send({
-            username : 'Updated Name'
-        })
-        .set('Authorization', 'Bearer '+ _token)
-        
-        expect(response.status).toBe(200);
-    })
+    expect(response.status).toBe(200)
+  })
 
-    it('Should return error if login information is incorrect', async() => {
-        const response = await request.get('/users/authenticate')
-        .set('Authorization',  'Bearer '+ _token)
-        
-        expect(response.status).toBe(404);
-    })
+  it("Should Update the User", async () => {
+    const response = await request
+      .put("/users/1")
+      .send({
+        username: "Updated Name",
+      })
+      .set("Authorization", "Bearer " + _token)
 
-    it('Should Delete the User', async() => {
-        const response = await request.delete('/users/1')
-        .set('Authorization', 'Bearer '+ _token)
-        
-        expect(response.status).toBe(200);
-     }) 
+    expect(response.status).toBe(200)
+  })
+
+  it("Should return error if login information is incorrect", async () => {
+    const response = await request
+      .get("/users/authenticate")
+      .set("Authorization", "Bearer " + _token)
+
+    expect(response.status).toBe(404)
+  })
+
+  it("Should Delete the User", async () => {
+    const response = await request
+      .delete("/users/1")
+      .set("Authorization", "Bearer " + _token)
+
+    expect(response.status).toBe(200)
+  })
 })
-
-    
-
-
-

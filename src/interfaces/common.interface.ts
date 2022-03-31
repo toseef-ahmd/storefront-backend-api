@@ -1,4 +1,4 @@
 export interface DataObject {
-    status : number,
-    data : Object
+  status: number
+  data: JSON
 }
