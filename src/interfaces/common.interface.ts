@@ -1,4 +1,5 @@
 export interface DataObject {
   status: number
-  data: JSON
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  data: Object
 }
