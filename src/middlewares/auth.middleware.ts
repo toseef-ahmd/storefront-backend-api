@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-import { Request, Response, NextFunction } from "express"
-import { METHOD_NOT_ALLOWED } from "http-status-codes"
-import jwt, { JwtPayload } from "jsonwebtoken"
-=======
+
 import { Request, Response, NextFunction, response } from "express";
 import { METHOD_NOT_ALLOWED } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../interfaces/users.interface";
 import { UserModel } from "../models/users.model";
->>>>>>> 2b5d7c8571c385689df540c033850c0a5bbcd8e6
 
 
 export const IsAuthenticated = (
