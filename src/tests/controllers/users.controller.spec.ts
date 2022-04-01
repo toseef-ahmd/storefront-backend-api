@@ -26,7 +26,6 @@ describe("Users Controller", () => {
 
     const { token } = result.body
     _token = token
-    console.log("token: ", _token)
   })
 
   afterAll(async () => {

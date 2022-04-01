@@ -1,6 +1,8 @@
 import supertest from "supertest"
 import { app } from "../../server"
 import { User } from "../../interfaces/users.interface"
+import { Order } from "../../interfaces/orders.interface"
+import { Product } from "../../interfaces/products.interface"
 
 const request = supertest(app)
 
@@ -13,23 +15,39 @@ describe("Orders Controller", () => {
     username: "tasueefAhmed",
     password_digest: "hello123",
   }
+  const order : Order = {
+    user_id : 1,
+    status : "active"
+  }
+
+  const product : Product = {
+    name: "Harry Potter",
+    price: 100,
+    category: "Books",
+  }
 
   beforeAll(async () => {
-    await request.post("/users").send(user)
+    const obj = await request.post("/users").send(user)
 
-    await request
+    console.log('user')
+    console.log(obj.body)
+    
+    const result = await request
       .post("/products")
-      .send({
-        name: "Harry Potter",
-        price: 100,
-        category: "Books",
-      })
+      .send(product)
       .set("Authorization", "Bearer " + _token)
 
-    await request
+      console.log('product')
+      console.log(result.body)
+    
+    const _order = await request
       .post("/orders")
-      .send({ user_id: 1 })
+      .send(order)
       .set("Authorization", "Bearer " + _token)
+
+      console.log("order")
+      console.log(_order.body)
+
   })
 
   afterAll(async () => {

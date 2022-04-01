@@ -26,7 +26,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     }
     const newOrder: DataObject = await ordersModel.create(_order)
     res.status(newOrder.status)
-    res.json(newOrder)
+    res.json(newOrder.data)
   } catch (error) {
     res.status(NOT_FOUND)
     res.json(error)
