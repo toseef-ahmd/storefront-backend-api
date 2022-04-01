@@ -1,10 +1,13 @@
-import{Request, Response } from "express"
+import { Request, Response } from "express"
 
 import { Dashboard } from "../services/dashboard.service"
 
 const dashboard = new Dashboard()
 
-export const orderItems = async (_req: Request, res: Response) : Promise<void> => {
+export const orderItems = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const products = await dashboard.orderItems()
     res.json(products)
@@ -13,7 +16,10 @@ export const orderItems = async (_req: Request, res: Response) : Promise<void> =
   }
 }
 
-export const usersOrders = async (_req: Request, res: Response) : Promise<void> => {
+export const usersOrders = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
   try {
     //console.log(_req);
     const _orders = await dashboard.userOrders()

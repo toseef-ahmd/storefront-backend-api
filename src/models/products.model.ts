@@ -95,9 +95,9 @@ export class ProductModel {
     }
   }
 
-  async delete(id: Number): Promise<DataObject> {
+  async delete(id: number): Promise<DataObject> {
     try {
-      const sql: string = "DELETE FROM products WHERE id=$1 RETURNING *"
+      const sql = "DELETE FROM products WHERE id=$1 RETURNING *"
       const conn: PoolClient = await Client.connect()
       const result: QueryResult<Product> = await conn.query(sql, [id])
 
@@ -116,7 +116,7 @@ export class ProductModel {
     }
   }
 
-  async update(id: number, product: Object): Promise<DataObject> {
+  async update(id: number, product: JSON): Promise<DataObject> {
     const keys: string = Object.keys(product).join(",")
     const values: string[] = Object.values(product)
 
@@ -126,7 +126,7 @@ export class ProductModel {
       })
       .join(",")
 
-    const sql: string = `UPDATE products SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`
+    const sql = `UPDATE products SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`
 
     try {
       const conn: PoolClient = await Client.connect()
@@ -147,10 +147,10 @@ export class ProductModel {
   }
 
   async clean(): Promise<boolean> {
-    const sql: string = "TRUNCATE TABLE products RESTART IDENTITY CASCADE"
+    const sql = "TRUNCATE TABLE products RESTART IDENTITY CASCADE"
     try {
       const conn: PoolClient = await Client.connect()
-      const result: QueryResult<Product> = await conn.query(sql)
+      await conn.query(sql)
 
       conn.release()
 

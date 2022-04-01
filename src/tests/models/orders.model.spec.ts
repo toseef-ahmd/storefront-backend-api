@@ -1,8 +1,5 @@
-import supertest from "supertest"
-
 import { OrdersModel } from "../../models/orders.model"
 import { DataObject } from "../../interfaces/common.interface"
-import { User } from "../../interfaces/users.interface"
 import { UserModel } from "../../models/users.model"
 import { ProductModel } from "../../models/products.model"
 
@@ -91,9 +88,10 @@ describe("Orders Model", () => {
   })
 
   it("Should Update a specific Order", async () => {
-    const update: Object = {
+    const update: JSON = <JSON>(<unknown>{
       status: "shipped",
-    }
+    })
+
     const result: DataObject = await model.update(1, update as JSON)
 
     expect(result.data).toEqual({

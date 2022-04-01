@@ -7,7 +7,7 @@ import { NOT_FOUND } from "http-status-codes"
 
 const model = new UserModel()
 
-export const index = async (req: Request, res: Response) : Promise<void> => {
+export const index = async (req: Request, res: Response): Promise<void> => {
   try {
     const users: DataObject = await model.index()
 
@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) : Promise<void> => {
   }
 }
 
-export const show = async (req: Request, res: Response) : Promise<void> => {
+export const show = async (req: Request, res: Response): Promise<void> => {
   try {
     const user: DataObject = await model.show(parseInt(req.params.id))
 
@@ -31,7 +31,7 @@ export const show = async (req: Request, res: Response) : Promise<void> => {
   }
 }
 
-export const create = async (req: Request, res: Response) : Promise<void> => {
+export const create = async (req: Request, res: Response): Promise<void> => {
   const user: User = {
     firstname: req.body.firstname as string,
     lastname: req.body.lastname as string,
@@ -61,7 +61,7 @@ export const create = async (req: Request, res: Response) : Promise<void> => {
   }
 }
 
-export const destroy = async (req: Request, res: Response) : Promise<void> => {
+export const destroy = async (req: Request, res: Response): Promise<void> => {
   try {
     const deleted: DataObject = await model.delete(parseInt(req.params.id))
 
@@ -73,7 +73,7 @@ export const destroy = async (req: Request, res: Response) : Promise<void> => {
   }
 }
 
-export const update = async (req: Request, res: Response) : Promise<void> => {
+export const update = async (req: Request, res: Response): Promise<void> => {
   try {
     const temp: JSON = req.body as JSON
 
@@ -90,7 +90,10 @@ export const update = async (req: Request, res: Response) : Promise<void> => {
   }
 }
 
-export const authenticate = async (req: Request, res: Response) : Promise<void> => {
+export const authenticate = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const result: DataObject = (await model.authenticate(
       req.body.username,
@@ -106,7 +109,7 @@ export const authenticate = async (req: Request, res: Response) : Promise<void> 
   }
 }
 
-export const clean = async (req: Request, res: Response) : Promise<void> => {
+export const clean = async (req: Request, res: Response): Promise<void> => {
   try {
     const deleted: boolean = await model.clean()
 

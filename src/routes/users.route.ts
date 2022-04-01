@@ -8,7 +8,7 @@ import {
   authenticate,
   clean,
 } from "../controllers/users.controller"
-import { IsAuthenticated, IsOwner } from "../middlewares/auth.middleware"
+import { IsAuthenticated } from "../middlewares/auth.middleware"
 
 const users_route = (app: express.Application): void => {
   app.post("/users", create)

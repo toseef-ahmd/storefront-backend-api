@@ -1,4 +1,3 @@
-import { PoolClient, QueryResult } from "pg"
 import Client from "../database/database"
 
 export class Dashboard {

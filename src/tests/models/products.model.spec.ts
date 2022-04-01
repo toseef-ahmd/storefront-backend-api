@@ -1,7 +1,4 @@
-import supertest from "supertest"
-
 import { ProductModel } from "../../models/products.model"
-import { Product } from "../../interfaces/products.interface"
 import { DataObject } from "../../interfaces/common.interface"
 
 const model = new ProductModel()
@@ -66,10 +63,10 @@ describe("Product Model", () => {
   })
 
   it("Should Update the Product", async () => {
-    const update: Object = {
+    const update: JSON = <JSON>(<unknown>{
       name: "Updated Name",
       price: 200,
-    }
+    })
 
     const result: DataObject = await model.update(1, update as JSON)
 

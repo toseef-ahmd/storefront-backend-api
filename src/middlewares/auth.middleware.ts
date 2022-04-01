@@ -1,14 +1,12 @@
-
-import { Request, Response, NextFunction } from "express";
-import { METHOD_NOT_ALLOWED } from "http-status-codes";
-import jwt, { JwtPayload } from "jsonwebtoken";
-
+import { Request, Response, NextFunction } from "express"
+import { METHOD_NOT_ALLOWED } from "http-status-codes"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 export const IsAuthenticated = (
   req: Request,
   res: Response,
   next: NextFunction
-) : Response | void => {
+): Response | void => {
   try {
     const authHeader = req.headers.authorization
     const token: string = authHeader?.split(" ")[1] as string
@@ -23,7 +21,11 @@ export const IsAuthenticated = (
   }
 }
 
-export const IsOwner = (req: Request, res: Response, next: NextFunction) : Response | void => {
+export const IsOwner = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response | void => {
   try {
     const authHeader = req.headers.authorization
     const token: string = authHeader?.split(" ")[1] as string

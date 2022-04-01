@@ -1,12 +1,7 @@
 import supertest from "supertest"
-import jwt, { Secret } from "jsonwebtoken"
 import { app } from "../../server"
 import { User } from "../../interfaces/users.interface"
-import { UserModel } from "../../models/users.model"
-
 const request = supertest(app)
-
-const JWT_SECRET: Secret = process.env.JWT_SECRET as Secret
 
 describe("Users Controller", () => {
   const user: User = {
@@ -16,11 +11,10 @@ describe("Users Controller", () => {
     password_digest: "hello123",
   }
 
-  let _id: number
   let _token: string // = process.env.token as string;
 
   beforeAll(async () => {
-    const result2 = await request.delete("/users")
+    await request.delete("/users")
     const user: User = {
       firstname: "tauseef",
       lastname: "Ahmed",

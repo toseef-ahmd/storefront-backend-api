@@ -1,5 +1,4 @@
 import supertest from "supertest"
-import { Secret } from "jsonwebtoken"
 import { app } from "../../server"
 import { User } from "../../interfaces/users.interface"
 

@@ -9,7 +9,7 @@ export class OrdersModel {
   async index(): Promise<DataObject> {
     try {
       const conn: PoolClient = await Client.connect()
-      const sql: string = "SELECT * from orders"
+      const sql = "SELECT * from orders"
       const result: QueryResult<Order> = await conn.query(sql)
 
       conn.release()
@@ -30,7 +30,7 @@ export class OrdersModel {
   async create(order: Order): Promise<DataObject> {
     try {
       const conn: PoolClient = await Client.connect()
-      const sql: string =
+      const sql =
         "INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *"
       const result: QueryResult<Order> = await conn.query(sql, [
         order.user_id,
@@ -83,7 +83,7 @@ export class OrdersModel {
 
     try {
       const conn: PoolClient = await Client.connect()
-      const sql: string = `UPDATE orders SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`
+      const sql = `UPDATE orders SET (${keys})=(${indices}) WHERE id=${id} RETURNING *`
 
       const result: QueryResult<Order> = await conn.query(sql, values)
 
@@ -153,10 +153,10 @@ export class OrdersModel {
   }
 
   async clean(): Promise<boolean> {
-    const sql: string = "TRUNCATE TABLE orders RESTART IDENTITY CASCADE"
+    const sql = "TRUNCATE TABLE orders RESTART IDENTITY CASCADE"
     try {
       const conn: PoolClient = await Client.connect()
-      const result: QueryResult<Order> = await conn.query(sql)
+      await conn.query(sql)
 
       conn.release()
 

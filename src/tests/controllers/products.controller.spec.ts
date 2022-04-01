@@ -1,12 +1,9 @@
 import supertest from "supertest"
-import jwt, { Secret } from "jsonwebtoken"
 import { app } from "../../server"
 import { Product } from "../../interfaces/products.interface"
 import { User } from "../../interfaces/users.interface"
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app)
-
-const JWT_SECRET: Secret = process.env.JWT_SECRET as Secret
 
 describe("Products Controller", () => {
   const product: Product = {
@@ -15,7 +12,6 @@ describe("Products Controller", () => {
     category: "Books",
   }
 
-  let _id: number
   let _token: string
 
   beforeAll(async () => {
@@ -32,7 +28,7 @@ describe("Products Controller", () => {
     _token = token
 
     //console.log("token: ", _token);
-    const result1 = await request
+    await request
       .post("/products")
       .send(product)
       .set("Authorization", "Bearer " + _token)

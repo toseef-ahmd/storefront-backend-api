@@ -8,13 +8,13 @@ import { NOT_FOUND, OK } from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 
 export class UserModel {
-  async authenticate(username: string, password: string): Promise<Object> {
+  async authenticate(username: string, password: string): Promise<DataObject> {
     try {
-      const sql: string =
+      const sql =
         "SELECT id, username, firstname, lastname FROM users WHERE username=$1"
       const conn: PoolClient = await Client.connect()
 
-      const result: QueryResult<User> = await Client.query(sql, [username])
+      const result: QueryResult<User> = await conn.query(sql, [username])
       const { rows } = result
 
       if (rows.length > 0) {
@@ -22,24 +22,24 @@ export class UserModel {
         const user: User = rows[0]
 
         if (!bcrypt.compareSync(password + pepper, user.password_digest)) {
-          const error: Object = {
+          const error: DataObject = {
             status: NOT_FOUND,
             data: "Incorrect Password",
           }
           return Object(error)
         }
 
-        const result: Object = {
+        const result: DataObject = {
           status: OK,
           data: user,
         }
-        return Object(result)
+        return result
       }
-      const error: Object = {
+      const error: DataObject = {
         status: NOT_FOUND,
         data: "No User found with this Username",
       }
-      return Object(error)
+      return error
     } catch (error) {
       throw new Error(`Not found, ${error}`)
     }
@@ -48,7 +48,7 @@ export class UserModel {
   async index(): Promise<DataObject> {
     try {
       const conn: PoolClient = await Client.connect()
-      const sql: string = "SELECT id, username, firstname, lastname FROM users"
+      const sql = "SELECT id, username, firstname, lastname FROM users"
       const result: QueryResult<User> = await conn.query(sql)
       conn.release()
 
@@ -101,7 +101,7 @@ export class UserModel {
 
   async show(id: number): Promise<DataObject> {
     try {
-      const sql: string =
+      const sql =
         "SELECT id, username, firstname, lastname FROM users WHERE id=$1"
       const conn: PoolClient = await Client.connect()
 
@@ -121,9 +121,9 @@ export class UserModel {
     }
   }
 
-  async delete(id: Number): Promise<DataObject> {
+  async delete(id: number): Promise<DataObject> {
     try {
-      const sql: string =
+      const sql =
         "DELETE FROM users WHERE id=$1 RETURNING id, username, firstname, lastname"
       const conn: PoolClient = await Client.connect()
       const result: QueryResult<User> = await conn.query(sql, [id])
@@ -143,7 +143,7 @@ export class UserModel {
     }
   }
 
-  async update(id: number, user: Object): Promise<DataObject> {
+  async update(id: number, user: JSON): Promise<DataObject> {
     const keys: string = Object.keys(user).join(",")
     const values: string[] = Object.values(user)
 
@@ -153,7 +153,7 @@ export class UserModel {
       })
       .join(",")
 
-    const sql: string = `UPDATE users SET (${keys})=(${indices}) WHERE id=${id} RETURNING id, username, firstname, lastname`
+    const sql = `UPDATE users SET (${keys})=(${indices}) WHERE id=${id} RETURNING id, username, firstname, lastname`
 
     try {
       const conn: PoolClient = await Client.connect()
@@ -174,10 +174,10 @@ export class UserModel {
   }
 
   async clean(): Promise<boolean> {
-    const sql: string = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
+    const sql = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
     try {
       const conn: PoolClient = await Client.connect()
-      const result: QueryResult<User> = await conn.query(sql)
+      await conn.query(sql)
 
       conn.release()
 

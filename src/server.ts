@@ -11,10 +11,10 @@ app.use(bodyParser.json())
 //Calls the Base Routes through Books handler.
 AppRoutes(app)
 
-const CorsOptions = {
-  origin: "localhost:8000",
-  optionsSuccessStatus: 200,
-}
+// const CorsOptions = {
+//   origin: "localhost:8000",
+//   optionsSuccessStatus: 200,
+// }
 
 app.listen(port, () => {
   console.log(`Server has been started on http://localhost:${port}`)

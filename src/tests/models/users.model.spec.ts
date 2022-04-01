@@ -1,7 +1,4 @@
-import supertest from "supertest"
-
 import { UserModel } from "../../models/users.model"
-import { User } from "../../interfaces/users.interface"
 import { DataObject } from "../../interfaces/common.interface"
 
 const model = new UserModel()
@@ -67,9 +64,9 @@ describe("Users Model", () => {
   })
 
   it("Should Update a specific User", async () => {
-    const update: Object = {
+    const update: JSON = <JSON>(<unknown>{
       username: "UpdatedName",
-    }
+    })
     const result: DataObject = await model.update(1, update as JSON)
 
     expect(result.data).toEqual({
