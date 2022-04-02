@@ -5,7 +5,6 @@
 - Index 
 - Show (args: product id)
 - Create (args: Product)[token required]
-- [OPTIONAL] Top 5 most popular products 
 - [OPTIONAL] Products by category (args: product category)
 
 #### Users
