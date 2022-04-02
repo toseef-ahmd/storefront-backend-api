@@ -27,10 +27,10 @@
 
 ## Data Shapes
 #### Product
--  id
+- id
 - name
 - price
-- =category
+- category
 
 #### User
 - id
