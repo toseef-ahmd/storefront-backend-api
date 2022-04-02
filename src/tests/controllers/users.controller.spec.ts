@@ -56,7 +56,7 @@ describe("Users Controller", () => {
     })
   })
 
-  it("Should create a new user", async () => {
+  it("Should create a new order", async () => {
     const response = await request.post("/users").send(user)
 
     expect(response.status).toBe(200)

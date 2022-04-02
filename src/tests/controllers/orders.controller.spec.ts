@@ -15,6 +15,7 @@ describe("Orders Controller", () => {
     username: "tasueefAhmed",
     password_digest: "hello123",
   }
+
   const order : Order = {
     user_id : 1,
     status : "active"
@@ -27,11 +28,12 @@ describe("Orders Controller", () => {
   }
 
   beforeAll(async () => {
+    //Create new user
     const obj = await request.post("/users").send(user)
 
     console.log('user')
     console.log(obj.body)
-    
+    //Create new product
     const result = await request
       .post("/products")
       .send(product)
@@ -40,6 +42,7 @@ describe("Orders Controller", () => {
       console.log('product')
       console.log(result.body)
     
+      //Create new Order
     const _order = await request
       .post("/orders")
       .send(order)
@@ -78,17 +81,25 @@ describe("Orders Controller", () => {
       expect(res.status).toBe(405)
     })
   })
-
-  it("Should create a new order", async () => {
+  it("Should Delete the Order", async () => {
     const response = await request
-      .post("/orders")
-      .send({ user_id: 1 })
+      .delete("/orders/1")
       .set("Authorization", "Bearer " + _token)
 
     expect(response.status).toBe(200)
   })
+  it("Should create a new order", async () => {
+    const response = await request
+      .post("/orders")
+      .send(order)
+      .set("Authorization", "Bearer " + _token)
 
-  it("Gets Orders list", async () => {
+      console.log('new order')
+      console.log(response.body)
+    expect(response.status).toBe(200)
+  })
+
+  it("Gets Orders List", async () => {
     const response = await request
       .get("/orders")
       .set("Authorization", "Bearer " + _token)
@@ -115,11 +126,4 @@ describe("Orders Controller", () => {
     expect(response.status).toBe(200)
   })
 
-  it("Should Delete the User", async () => {
-    const response = await request
-      .delete("/orders/1")
-      .set("Authorization", "Bearer " + _token)
-
-    expect(response.status).toBe(200)
-  })
 })
