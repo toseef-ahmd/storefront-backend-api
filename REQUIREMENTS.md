@@ -2,9 +2,9 @@
 
 ## API Endpoints
 #### Products
-- Index [GET] (http://localhost:8000/products)
+- Index **[GET]** (http://localhost:8000/products)
 - Show (args: product id) **[GET]** (http://localhost:8000/products/:id)
-- Create (args: Product) *[token required]* **[POST]** (http://localhost:8000/products)
+- Create (args: Product) ***[token required]* [POST]** (http://localhost:8000/products)
 - Update (args: id, Product) *[token required]* **[PUT]** (http://localhost:8000/products/:id)
 - Delete (args: product id) *[token required]* **[DELETE]** (http://localhost:8000/products/:id)
 
