@@ -3,7 +3,7 @@
 ## API Endpoints
 #### Products
 - Index 
-- Show (args: product id)
+- Show (args: product id) (https://link-url-here.org)
 - Create (args: Product)[token required]
 - Update (args: id, Product)[token required]
 - Delete (args: product id)[token required]
@@ -22,8 +22,8 @@
 - Show (args: id)[token required]
 - Update (args: id)[token required]
 - Delete (args: id)[token required]
-- Add Products in an order (args: product_id, quantity)[token required]
-- Current Order by user (args: user id)[token required]
+- Add Products in an order (args: product_id, quantity)[token required] (http://localhost:8000/orders/:id/products)[token required]
+- Current Order by user (args: user id)[token required] (http://localhost:8000/user_orders/)[token required]
 
 ## Data Shapes
 #### Product
