@@ -1,26 +1,77 @@
-# node-postgress
+# node-postgress-store-backend
 
-## CommandsTo Run
 
-yarn start
+## About
 
-yarn test
+A StoreFront backend application written in NodeJS and Typescript as a part of FullStack Javascript Nanodegree program. This application has APIs for Users, Products, and Orders and their respective CRUD operations.
+
+### Prerequisites
+
+You need the following modules and dependencies installed to run this project:
+```
+docker-compose   # To run the Postgres database on Docker
+Node v14.16.0    # To run the application
+Typescript       # App is written in Typescript
+yarn             # For dependency management
+```
+
+### Installing Dependencies
+
+Simply, run the following command to install the project dependencies after you have cloned the repository:
+```
+yarn
+```
+
+### Setup environment
 
 ## DB Credentials
 POSTGRES_HOST = 127.0.0.1
 
-### Dev
+#### Dev
+``` 
+    POSTGRES_DB = storefront_db
+    POSTGRES_USER = tauseef_ahmed
+    POSTGRES_PASSWORD = password123
+```
+#### Test
+``` 
+    POSTGRES_TEST_DB = storefront_db_test
+    POSTGRES_TEST_USER = tauseef_ahmed_test
+    POSTGRES_TEST_PASSWORD = password123
+```
+## Running the application
 
-POSTGRES_DB = storefront_db
+Use the following command to run the application:
+```
+yarn start
+```
 
-POSTGRES_USER = tauseef_ahmed
+The application will run on http://localhost:8000/.
 
-POSTGRES_PASSWORD = password123
+## Running the unit tests
 
-### Test
+Use the following command to run the unit tests:
+```
+yarn test
+```
+## Lint
+```
+yarn lint
+```
+You may also use the Postman collection present in the repository for testing.
 
-POSTGRES_TEST_DB = storefront_db_test
+## Built With
 
-POSTGRES_TEST_USER = tauseef_ahmed_test
+* [NodeJS](https://nodejs.org/) - The JavaScript runtime
+* [Yarn](https://yarnpkg.com/) - The dependency manager
+* [db-migrate](https://db-migrate.readthedocs.io/en/latest/) - The database migration tool
+* [Express](https://expressjs.com) - The web framework
+* [TypeScript](https://www.typescriptlang.org/) - Types JS extension
+* [Jasmine](https://jasmine.github.io/) - The unit testing framework
 
-POSTGRES_TEST_PASSWORD = password123
+## Authors
+
+**Toseef Ahmed**
+
+
+
