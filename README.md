@@ -68,7 +68,7 @@ You may also use the Postman collection present in the repository for testing.
 
 ## Authors
 
-*Toseef Ahmed
+**Toseef Ahmed**
 
 
 
