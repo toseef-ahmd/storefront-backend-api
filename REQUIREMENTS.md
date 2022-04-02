@@ -5,34 +5,47 @@
 - Index 
 - Show (args: product id)
 - Create (args: Product)[token required]
-- [OPTIONAL] Products by category (args: product category)
+- Update (args: id, Product)[token required]
+- Delete (args: product id)[token required]
 
 #### Users
 - Index [token required]
 - Show (args: id)[token required]
-- Create (args: User)[token required]
+- Create (args: User)
+- Update (args: id)[token required]
+- Delete (args: id)[token required]
+- Authenticate (args: user, password)[token required]
 
 #### Orders
+- Create a new Order (args: Order)[token required]
+- Index [token required]
+- Show (args: id)[token required]
+- Update (args: id)[token required]
+- Delete (args: id)[token required]
+- Add Products in an order (args: product_id, quantity)[token required]
 - Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
 ## Data Shapes
 #### Product
 -  id
 - name
 - price
-- [OPTIONAL] category
+- =category
 
 #### User
 - id
+- username
 - firstName
 - lastName
 - password
 
 #### Orders
 - id
-- id of each product in the order
-- quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+#### Order Items
+- id
+- product_id
+- quantity
 
