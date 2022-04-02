@@ -6,12 +6,14 @@ import {
   show,
   destroy,
   clean,
+  filter,
 } from "../controllers/products.controller"
 import { IsAuthenticated } from "../middlewares/auth.middleware"
 
 const products_route = (app: express.Application): void => {
   app.post("/products", IsAuthenticated, create)
   app.get("/products", index)
+  app.get("/products/filter", filter)
   app.get("/products/:id", show)
   app.delete("/products/:id", IsAuthenticated, destroy)
   app.put("/products/:id", IsAuthenticated, update)

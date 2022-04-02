@@ -69,7 +69,8 @@ export class ProductModel {
       throw new Error(`Cannot get product ${error}`)
     }
   }
-  async filter(params: string): Promise<DataObject> {
+
+  async filter(params: JSON): Promise<DataObject> {
     const keys: string = Object.keys(params).join(",")
     const values: string[] = Object.values(params)
 
@@ -79,6 +80,7 @@ export class ProductModel {
     try {
       const conn = await Client.connect()
       const sql = `SELECT * FROM products WHERE ${keys}=${indices}`
+      console.log(sql)
       const result: QueryResult<Product> = await conn.query(sql, [values])
       conn.release()
 

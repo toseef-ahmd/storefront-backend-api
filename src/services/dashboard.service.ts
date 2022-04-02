@@ -7,7 +7,7 @@ export class Dashboard {
     try {
       const conn = await Client.connect()
       const sql =
-        "SELECT title, price, order_id FROM products INNER JOIN order_items ON products.id = order_items.product_id"
+        "SELECT name, price, order_id FROM products INNER JOIN order_items ON products.id = order_items.product_id"
 
       const result = await conn.query(sql)
 
@@ -19,11 +19,12 @@ export class Dashboard {
     }
   }
 
-  async userOrders(): Promise<{ username: string; order_id: number }[]> {
+  async userOrders(
+    id: number
+  ): Promise<{ username: string; order_id: number }[]> {
     try {
       const conn = await Client.connect()
-      const sql =
-        "SELECT username, orders.id, status FROM users INNER JOIN orders ON users.id = orders.user_id"
+      const sql = `SELECT username, orders.id, status FROM users INNER JOIN orders ON users.id = orders.user_id AND users.id=${id}`
 
       const result = await conn.query(sql)
 

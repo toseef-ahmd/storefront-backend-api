@@ -75,6 +75,20 @@ export const update = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+export const filter = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const params = <JSON>(<unknown>req.query)
+    console.log(params)
+    const prod: DataObject = await model.filter(params)
+
+    res.status(prod.status)
+    res.json(prod.data)
+  } catch (error) {
+    res.status(NOT_FOUND)
+    res.json(error)
+  }
+}
+
 export const clean = async (req: Request, res: Response): Promise<void> => {
   try {
     const deleted: boolean = await model.clean()

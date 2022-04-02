@@ -16,12 +16,12 @@ describe("Orders Controller", () => {
     password_digest: "hello123",
   }
 
-  const order : Order = {
-    user_id : 1,
-    status : "active"
+  const order: Order = {
+    user_id: 1,
+    status: "active",
   }
 
-  const product : Product = {
+  const product: Product = {
     name: "Harry Potter",
     price: 100,
     category: "Books",
@@ -29,28 +29,13 @@ describe("Orders Controller", () => {
 
   beforeAll(async () => {
     //Create new user
-    const obj = await request.post("/users").send(user)
+    await request.post("/users").send(user)
 
-    console.log('user')
-    console.log(obj.body)
     //Create new product
-    const result = await request
+    await request
       .post("/products")
       .send(product)
       .set("Authorization", "Bearer " + _token)
-
-      console.log('product')
-      console.log(result.body)
-    
-      //Create new Order
-    const _order = await request
-      .post("/orders")
-      .send(order)
-      .set("Authorization", "Bearer " + _token)
-
-      console.log("order")
-      console.log(_order.body)
-
   })
 
   afterAll(async () => {
@@ -63,12 +48,12 @@ describe("Orders Controller", () => {
     await request.delete("/users")
   })
 
-  it("Should Return error if Auth Token is missing", () => {
-    request.get("/orders/1").then((res) => {
+  it("Should Return error if Auth Token is missing", async () => {
+    await request.get("/orders/1").then((res) => {
       expect(res.status).toBe(405)
     })
 
-    request
+    await request
       .put("/orders/1")
       .send({
         status: "updated",
@@ -77,25 +62,17 @@ describe("Orders Controller", () => {
         expect(res.status).toBe(405)
       })
 
-    request.delete("/orders/1").then((res) => {
+    await request.delete("/orders/1").then((res) => {
       expect(res.status).toBe(405)
     })
   })
-  it("Should Delete the Order", async () => {
-    const response = await request
-      .delete("/orders/1")
-      .set("Authorization", "Bearer " + _token)
 
-    expect(response.status).toBe(200)
-  })
   it("Should create a new order", async () => {
     const response = await request
       .post("/orders")
       .send(order)
       .set("Authorization", "Bearer " + _token)
 
-      console.log('new order')
-      console.log(response.body)
     expect(response.status).toBe(200)
   })
 
@@ -125,5 +102,11 @@ describe("Orders Controller", () => {
 
     expect(response.status).toBe(200)
   })
+  it("Should Delete the Order", async () => {
+    const response = await request
+      .delete("/orders/1")
+      .set("Authorization", "Bearer " + _token)
 
+    expect(response.status).toBe(200)
+  })
 })

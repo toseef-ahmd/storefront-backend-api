@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-
 import { Dashboard } from "../services/dashboard.service"
 
 const dashboard = new Dashboard()
@@ -17,13 +16,20 @@ export const orderItems = async (
 }
 
 export const usersOrders = async (
-  _req: Request,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    //console.log(_req);
-    const _orders = await dashboard.userOrders()
-    res.json(_orders)
+    const authHeader = req.headers.authorization
+    const token: string = authHeader?.split(" ")[1] as string
+    const valid = jwt.verify(token, process.env.JWT_SECRET as string)
+
+    for (const [key, value] of Object.entries(valid)) {
+      if (key == "id") {
+        const _orders = await dashboard.userOrders(parseInt(value))
+        res.json(_orders)
+      }
+    }
   } catch (error) {
     throw new Error("Unable to find Results. " + error)
   }

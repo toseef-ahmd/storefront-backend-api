@@ -39,29 +39,6 @@ describe("Products Controller", () => {
     await request.delete("/products")
   })
 
-  it("Should Return error if Auth Token is missing", () => {
-    request
-      .post("/products")
-      .send(product)
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
-
-    request
-      .put("/products/1")
-      .send({
-        name: "Updated name",
-        price: 200,
-      })
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
-
-    request.delete("/products/1").then((res) => {
-      expect(res.status).toBe(405)
-    })
-  })
-
   it("Should create a new Product", async () => {
     const response = await request
       .post("/products")
@@ -105,5 +82,28 @@ describe("Products Controller", () => {
       .set("Accept", "application/json, text/javascript, */*; q=0.01")
 
     expect(response.status).toBe(200)
+  })
+
+  it("Should Return error if Auth Token is missing", () => {
+    request
+      .post("/products")
+      .send(product)
+      .then((res) => {
+        expect(res.status).toBe(405)
+      })
+
+    request
+      .put("/products/1")
+      .send({
+        name: "Updated name",
+        price: 200,
+      })
+      .then((res) => {
+        expect(res.status).toBe(405)
+      })
+
+    request.delete("/products/1").then((res) => {
+      expect(res.status).toBe(405)
+    })
   })
 })

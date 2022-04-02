@@ -35,7 +35,6 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 
 export const show = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log(req.params.id)
     const order: DataObject = await ordersModel.show(parseInt(req.params.id))
 
     res.status(order.status)

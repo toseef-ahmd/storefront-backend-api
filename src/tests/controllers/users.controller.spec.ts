@@ -32,30 +32,6 @@ describe("Users Controller", () => {
     await request.delete("/users")
   })
 
-  it("Should Return error if Auth Token is missing", () => {
-    request.get("/users").then((res) => {
-      expect(res.status).toBe(405)
-    })
-
-    request.get("/users/1").then((res) => {
-      expect(res.status).toBe(405)
-    })
-
-    request
-      .put("/users/1")
-      .send({
-        firstname: user.firstname + "update",
-        lastname: user.lastname + "update",
-      })
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
-
-    request.delete("/users/1").then((res) => {
-      expect(res.status).toBe(405)
-    })
-  })
-
   it("Should create a new order", async () => {
     const response = await request.post("/users").send(user)
 
@@ -103,5 +79,29 @@ describe("Users Controller", () => {
       .set("Authorization", "Bearer " + _token)
 
     expect(response.status).toBe(200)
+  })
+
+  it("Should Return error if Auth Token is missing", () => {
+    request.get("/users").then((res) => {
+      expect(res.status).toBe(405)
+    })
+
+    request.get("/users/1").then((res) => {
+      expect(res.status).toBe(405)
+    })
+
+    request
+      .put("/users/1")
+      .send({
+        firstname: user.firstname + "update",
+        lastname: user.lastname + "update",
+      })
+      .then((res) => {
+        expect(res.status).toBe(405)
+      })
+
+    request.delete("/users/1").then((res) => {
+      expect(res.status).toBe(405)
+    })
   })
 })
