@@ -9,21 +9,21 @@
 - Delete (args: product id)[token required] [DELETE] (http://localhost:8000/products/:id)
 
 #### Users
-- Index [token required] [GET](http://localhost:8000/users)
-- Show (args: id)[token required] [GET](http://localhost:8000/users/:id)
-- Create (args: User) [POST](http://localhost:8000/users)
-- Update (args: id)[token required] [UPDATE](http://localhost:8000/users/:id)
-- Delete (args: id)[token required] [DELETE](http://localhost:8000/users/:id)
-- Authenticate (args: user, password)[token required] [POST](http://localhost:8000/users/authenticate)
+- Index [token required] [GET] (http://localhost:8000/users)
+- Show (args: id)[token required] [GET] (http://localhost:8000/users/:id)
+- Create (args: User) [POST] (http://localhost:8000/users)
+- Update (args: id)[token required] [UPDATE] (http://localhost:8000/users/:id)
+- Delete (args: id)[token required] [DELETE] (http://localhost:8000/users/:id)
+- Authenticate (args: user, password)[token required] [POST] (http://localhost:8000/users/authenticate)
 
 #### Orders
-- Create a new Order (args: Order) [token required] [POST](http://localhost:8000/orders)
-- Index [token required] [GET](http://localhost:8000/orders/)
-- Show (args: id)[token required] [GET](http://localhost:8000/orders/:id)
-- Update (args: id)[token required] [PUT](http://localhost:8000/orders/:id)
-- Delete (args: id)[token required] [DELETE](http://localhost:8000/orders/:id)
-- Add Products in an order (args: product_id, quantity)[token required] (http://localhost:8000/orders/:id/products)
-- Current Order by user (args: user id)[token required] (http://localhost:8000/user_orders/) 
+- Create a new Order (args: Order) [token required] [POST] (http://localhost:8000/orders)
+- Index [token required] [GET] (http://localhost:8000/orders/)
+- Show (args: id)[token required] [GET] (http://localhost:8000/orders/:id)
+- Update (args: id)[token required] [PUT] (http://localhost:8000/orders/:id)
+- Delete (args: id)[token required] [DELETE] (http://localhost:8000/orders/:id)
+- Add Products in an order (args: product_id, quantity)[token required] [POST] (http://localhost:8000/orders/:id/products)
+- Current Order by user (args: user id)[token required] [GET] (http://localhost:8000/user_orders/) 
 
 ## Data Shapes
 #### Product
