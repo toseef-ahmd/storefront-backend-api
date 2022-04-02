@@ -54,7 +54,10 @@ Use the following command to run the unit tests:
 ```
 yarn test
 ```
-
+## Lint
+```
+yarn lint
+```
 You may also use the Postman collection present in the repository for testing.
 
 ## Built With
