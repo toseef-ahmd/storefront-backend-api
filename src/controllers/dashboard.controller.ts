@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { Dashboard } from "../services/dashboard.service"
+import jwt from 'jsonwebtoken'
 
 const dashboard = new Dashboard()
 
@@ -26,7 +27,7 @@ export const usersOrders = async (
 
     for (const [key, value] of Object.entries(valid)) {
       if (key == "id") {
-        const _orders = await dashboard.userOrders(parseInt(value))
+        const _orders = await dashboard.userOrders(value as number)
         res.json(_orders)
       }
     }
