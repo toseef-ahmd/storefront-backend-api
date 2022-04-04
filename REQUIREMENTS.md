@@ -43,6 +43,11 @@ Table: Product (id:serial[primary key], name:varchar(50)[not null], price:numeri
  name     | character varying(250) | not null
  price    | integer                | not null
  category | character varying(255) | not null
+ 
+ Indexes:
+    "products_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "order_items" CONSTRAINT "order_items_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 ```
 
 #### User
