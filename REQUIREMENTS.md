@@ -35,7 +35,15 @@
 ```
 Table: Product (id:serial[primary key], name:varchar(50)[not null], price:numeric[not null], category:varchar(50))
 ```
-
+```
+                                  Table "public.products"
+  Column  |          Type          |                       Modifiers
+----------+------------------------+-------------------------------------------------------
+ id       | integer                | not null default nextval('products_id_seq'::regclass)
+ name     | character varying(250) | not null
+ price    | integer                | not null
+ category | character varying(255) | not null
+```
 
 #### User
 - id
