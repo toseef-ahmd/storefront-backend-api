@@ -48,7 +48,7 @@ yarn start
 
 The application will run on http://localhost:8000/.
 #### Port 
-``` The application runs on PORT 8000```
+The application runs on PORT 8000
 
 ## Running the unit tests
 
