@@ -39,6 +39,8 @@ POSTGRES_HOST = 127.0.0.1
     POSTGRES_TEST_USER = tauseef_ahmed_test
     POSTGRES_TEST_PASSWORD = password123
 ```
+
+Please check [REQUIREMENTS.md](REQUIREMENTS.md) for Database related info.
 ## Running the application
 
 Use the following command to run the application:
