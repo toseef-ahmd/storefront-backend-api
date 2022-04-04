@@ -32,6 +32,11 @@
 - price
 - category
 
+```
+Table: Product (id:serial[primary key], name:varchar(50)[not null], price:numeric[not null], category:varchar(50))
+```
+
+
 #### User
 - id
 - username
