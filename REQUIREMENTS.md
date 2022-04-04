@@ -33,9 +33,6 @@
 - category
 
 ```
-Table: Product (id:serial[primary key], name:varchar(50)[not null], price:numeric[not null], category:varchar(50))
-```
-```
                                   Table "public.products"
   Column  |          Type          |                       Modifiers
 ----------+------------------------+-------------------------------------------------------
@@ -57,14 +54,59 @@ Referenced by:
 - lastName
 - password
 
+```
+                                     Table "public.users"
+     Column      |          Type          |                     Modifiers
+-----------------+------------------------+----------------------------------------------------
+ id              | integer                | not null default nextval('users_id_seq'::regclass)
+ username        | character varying(250) | not null
+ firstname       | character varying(250) | not null
+ lastname        | character varying(250) | not null
+ password_digest | character varying(250) | not null
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "orders" CONSTRAINT "orders_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+```
+
 #### Orders
 - id
 - user_id
 - status of order (active or complete)
 
+```
+                                 Table "public.orders"
+ Column  |          Type          |                      Modifiers
+---------+------------------------+-----------------------------------------------------
+ id      | integer                | not null default nextval('orders_id_seq'::regclass)
+ user_id | bigint                 |
+ status  | character varying(255) |
+Indexes:
+    "orders_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "orders_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+Referenced by:
+    TABLE "order_items" CONSTRAINT "order_items_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+```
+
 #### Order Items
 - id
 - product_id
 - quantity
+
+```
+                          Table "public.order_items"
+   Column   |  Type   |                        Modifiers
+------------+---------+----------------------------------------------------------
+ id         | integer | not null default nextval('order_items_id_seq'::regclass)
+ product_id | bigint  |
+ order_id   | bigint  |
+ quantity   | integer | not null
+Indexes:
+    "order_items_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "order_items_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    "order_items_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+```
 
 
