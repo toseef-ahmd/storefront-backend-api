@@ -81,16 +81,16 @@ describe("Users Controller", () => {
     expect(response.status).toBe(200)
   })
 
-  it("Should Return error if Auth Token is missing", () => {
-    request.get("/users").then((res) => {
+  it("Should Return error if Auth Token is missing", async() => {
+    await request.get("/users").then((res) => {
       expect(res.status).toBe(405)
     })
 
-    request.get("/users/1").then((res) => {
+    await request.get("/users/1").then((res) => {
       expect(res.status).toBe(405)
     })
 
-    request
+    await request
       .put("/users/1")
       .send({
         firstname: user.firstname + "update",
@@ -100,7 +100,7 @@ describe("Users Controller", () => {
         expect(res.status).toBe(405)
       })
 
-    request.delete("/users/1").then((res) => {
+    await request.delete("/users/1").then((res) => {
       expect(res.status).toBe(405)
     })
   })

@@ -48,24 +48,6 @@ describe("Orders Controller", () => {
     await request.delete("/users")
   })
 
-  it("Should Return error if Auth Token is missing", async () => {
-    await request.get("/orders/1").then((res) => {
-      expect(res.status).toBe(405)
-    })
-
-    await request
-      .put("/orders/1")
-      .send({
-        status: "updated",
-      })
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
-
-    await request.delete("/orders/1").then((res) => {
-      expect(res.status).toBe(405)
-    })
-  })
 
   it("Should create a new order", async () => {
     const response = await request
@@ -108,5 +90,24 @@ describe("Orders Controller", () => {
       .set("Authorization", "Bearer " + _token)
 
     expect(response.status).toBe(200)
+  })
+
+  it("Should Return error if Auth Token is missing", async () => {
+    await request.get("/orders/1").then((res) => {
+      expect(res.status).toBe(405)
+    })
+
+    await request
+      .put("/orders/1")
+      .send({
+        status: "updated",
+      })
+      .then((res) => {
+        expect(res.status).toBe(405)
+      })
+
+    await request.delete("/orders/1").then((res) => {
+      expect(res.status).toBe(405)
+    })
   })
 })

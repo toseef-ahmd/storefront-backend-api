@@ -84,15 +84,15 @@ describe("Products Controller", () => {
     expect(response.status).toBe(200)
   })
 
-  it("Should Return error if Auth Token is missing", () => {
-    request
+  it("Should Return error if Auth Token is missing", async() => {
+    await request
       .post("/products")
       .send(product)
       .then((res) => {
         expect(res.status).toBe(405)
       })
 
-    request
+    await request
       .put("/products/1")
       .send({
         name: "Updated name",
@@ -102,7 +102,7 @@ describe("Products Controller", () => {
         expect(res.status).toBe(405)
       })
 
-    request.delete("/products/1").then((res) => {
+    await request.delete("/products/1").then((res) => {
       expect(res.status).toBe(405)
     })
   })
