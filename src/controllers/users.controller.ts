@@ -95,15 +95,17 @@ export const authenticate = async (
   res: Response
 ): Promise<void> => {
   try {
-    const result: DataObject = (await model.authenticate(
+    
+    const result: DataObject = await model.authenticate(
       req.body.username,
       req.body.password
-    )) as DataObject
-
+    )
+    
     const { status, data } = result
     res.status(status)
     res.json(data)
   } catch (error) {
+    console.log("Catch")
     res.status(NOT_FOUND)
     res.json(error)
   }

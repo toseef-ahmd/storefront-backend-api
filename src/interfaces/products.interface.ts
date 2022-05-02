@@ -4,5 +4,8 @@ export interface Product {
   readonly id?: number
   name: string
   price: number
-  category: string
+  category: string,
+  rating : number,
+  details : string,
+  image : string
 }

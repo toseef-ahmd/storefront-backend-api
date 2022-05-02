@@ -9,9 +9,10 @@ import { DataObject } from "../interfaces/common.interface"
 
 export class UserModel {
   async authenticate(username: string, password: string): Promise<DataObject> {
+   
     try {
       const sql =
-        "SELECT id, username, firstname, lastname FROM users WHERE username=$1"
+        "SELECT * FROM users WHERE username=$1"
       const conn: PoolClient = await Client.connect()
 
       const result: QueryResult<User> = await conn.query(sql, [username])
@@ -19,27 +20,33 @@ export class UserModel {
 
       if (rows.length > 0) {
         const pepper: string = process.env.PASSWORD_HASH as string
+       
         const user: User = rows[0]
+        console.log(user);
 
-        if (!bcrypt.compareSync(password + pepper, user.password_digest)) {
+        const userPass : string = password+pepper;
+        if (!bcrypt.compareSync(userPass, user.password_digest)) {
           const error: DataObject = {
             status: NOT_FOUND,
             data: "Incorrect Password",
           }
-          return Object(error)
+          return error
         }
-
+        
         const result: DataObject = {
           status: OK,
           data: user,
         }
         return result
       }
+
+      
       const error: DataObject = {
         status: NOT_FOUND,
         data: "No User found with this Username",
       }
       return error
+
     } catch (error) {
       throw new Error(`Not found, ${error}`)
     }
@@ -76,6 +83,8 @@ export class UserModel {
         user.password_digest + pepper,
         parseInt(hashSteps)
       )
+
+      console.log(hash);
 
       const result: QueryResult<User> = await conn.query(sql, [
         user.username,
