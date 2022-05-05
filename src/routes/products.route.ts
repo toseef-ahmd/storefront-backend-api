@@ -16,7 +16,7 @@ const products_route = (app: express.Application): void => {
   app.get("/products/filter", filter)
   app.get("/products/:id", show)
   app.delete("/products/:id", IsAuthenticated, destroy)
-  app.put("/products/:id", IsAuthenticated, update)
+  app.patch("/products/:id", IsAuthenticated, update)
   app.delete("/products", clean)
 }
 

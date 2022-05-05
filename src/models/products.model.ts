@@ -28,11 +28,12 @@ export class ProductModel {
       const conn = await Client.connect()
       console.log(prod);
       const sql =
-        "INSERT INTO products (name, price, category, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"
+        "INSERT INTO products (name, price, category, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *"
       const result = await conn.query(sql, [
         prod.name,
         prod.price,
         prod.category,
+        prod.quantity,
         prod.details,
         prod.rating,
         prod.image
@@ -122,6 +123,7 @@ export class ProductModel {
   }
 
   async update(id: number, product: JSON): Promise<DataObject> {
+    console.log(product);
     const keys: string = Object.keys(product).join(",")
     const values: string[] = Object.values(product)
 
