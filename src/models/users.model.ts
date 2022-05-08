@@ -22,10 +22,15 @@ export class UserModel {
         const pepper: string = process.env.PASSWORD_HASH as string
        
         const user: User = rows[0]
-        console.log(user);
-
-        const userPass : string = password+pepper;
-        if (!bcrypt.compareSync(userPass, user.password_digest)) {
+        //console.log(user); 
+        if (bcrypt.compareSync(password+pepper, user.password_digest)) {
+          const result: DataObject = {
+            status: OK,
+            data: user,
+          }
+          return result
+        }
+        else {
           const error: DataObject = {
             status: NOT_FOUND,
             data: "Incorrect Password",
@@ -33,11 +38,7 @@ export class UserModel {
           return error
         }
         
-        const result: DataObject = {
-          status: OK,
-          data: user,
-        }
-        return result
+        
       }
 
       
