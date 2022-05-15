@@ -2,7 +2,6 @@ import { Request, Response } from "express"
 import { NO_CONTENT} from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 import { Order } from "../interfaces/orders.interface"
-import { OrderItems } from "../interfaces/order_items.interface"
 
 import { OrdersModel } from "../models/orders.model"
 
@@ -84,15 +83,15 @@ export const addProducts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  
-  console.log(req.body)
-  const orderItem : OrderItems = req.body.orderItem
-
+  const orderId: number = parseInt(req.params.id)
+  const productId: number = req.body.product_id
+  const quantity: number = req.body.quantity
   try {
     const order_items: DataObject = await ordersModel.addProducts(
-      orderItem
+      orderId,
+      productId,
+      quantity
     )
-
     res.status(order_items.status)
     res.json(order_items.data)
   } catch (error) {

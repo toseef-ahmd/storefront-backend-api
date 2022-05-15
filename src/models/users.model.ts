@@ -4,7 +4,7 @@ import Client from "../database/database"
 import bcrypt from "bcrypt"
 import { User } from "../interfaces/users.interface"
 
-import { NO_CONTENT, OK } from "http-status-codes"
+import { NOT_FOUND, OK, UNAUTHORIZED } from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 
 export class UserModel {
@@ -23,36 +23,31 @@ export class UserModel {
       if (rows.length > 0) {
         
         const user: User = rows[0]
-        
         const pepper: string = process.env.PASSWORD_HASH as string
-
         const pepperedPass = password + pepper;
-       
         const validPass : boolean = bcrypt.compareSync(pepperedPass, user.password_digest);
        
         if (validPass) {
-          
           const result: DataObject = {
             status: OK,
             data: user,
           }
-          
           return result
         }
         else {
-          const error: DataObject = {
-            status: NO_CONTENT,
+          const passErr: DataObject = {
+            status: UNAUTHORIZED,
             data: "Incorrect Password",
           }
-          return error
+          return passErr
         }
       }
       
-      const error: DataObject = {
-        status: NO_CONTENT,
+      const userErr: DataObject = {
+        status: UNAUTHORIZED,
         data: "No User found with this Username",
       }
-      return error
+      return userErr
 
     } catch (error) {
       throw new Error(`Not found, ${error}`)
@@ -85,7 +80,7 @@ export class UserModel {
       conn.release()
 
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -105,7 +100,7 @@ export class UserModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0 ? result.rows : { error: "No Records found" },
       }
@@ -127,7 +122,7 @@ export class UserModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -149,7 +144,7 @@ export class UserModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -179,7 +174,7 @@ export class UserModel {
 
       conn.release()
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]

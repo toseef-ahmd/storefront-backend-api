@@ -3,7 +3,7 @@ import { UserModel } from "../models/users.model"
 import { User } from "../interfaces/users.interface"
 import { DataObject } from "../interfaces/common.interface"
 import jwt from "jsonwebtoken"
-import { NO_CONTENT } from "http-status-codes"
+import { NOT_FOUND } from "http-status-codes"
 
 const model = new UserModel()
 
@@ -14,7 +14,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     res.status(users.status)
     res.json(users.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -26,7 +26,7 @@ export const show = async (req: Request, res: Response): Promise<void> => {
     res.status(user.status)
     res.json(user.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -49,7 +49,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     res.status(status)
     res.json({ token: token })
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -61,7 +61,7 @@ export const destroy = async (req: Request, res: Response): Promise<void> => {
     res.status(deleted.status)
     res.json(deleted.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -78,7 +78,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
     res.status(updated.status)
     res.json(updated.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -88,24 +88,26 @@ export const authenticate = async (
   res: Response
 ): Promise<void> => {
   try {
-   
+    console.log("Login")
     const result: DataObject = await model.authenticate(
       req.body.username,
       req.body.password
     )
     const { status, data } = result
-    
-    console.log(result)
+
     res.status(status)
     if(status==200) {
       const token = await generateToken(data as User);
+      console.log(token)
       res.json({token: token})
     }
     else {
+      console.log(data)
       res.json(data)
     }
   } catch (error) {
-    res.status(NO_CONTENT)
+    console.log("Catch")
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -117,7 +119,7 @@ export const clean = async (req: Request, res: Response): Promise<void> => {
     res.status(200)
     res.json({ deleted: deleted })
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }

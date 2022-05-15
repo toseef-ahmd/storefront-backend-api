@@ -11,7 +11,7 @@ export const IsAuthenticated = (
     const authHeader = req.headers.authorization
     
     const token: string = authHeader?.split(" ")[1] as string
-    console.log(token)
+    
     jwt.verify(token, process.env.JWT_SECRET as string)
 
     return next()
