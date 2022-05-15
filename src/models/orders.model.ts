@@ -3,7 +3,7 @@ import { Order } from "../interfaces/orders.interface"
 import Client from "../database/database"
 import { OrderItems } from "../interfaces/order_items.interface"
 import { DataObject } from "../interfaces/common.interface"
-import { NOT_FOUND, OK } from "http-status-codes"
+import { NO_CONTENT, OK } from "http-status-codes"
 
 export class OrdersModel {
   async index(): Promise<DataObject> {
@@ -15,7 +15,7 @@ export class OrdersModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0 ? result.rows : { error: "No Records found" },
       }
@@ -29,6 +29,7 @@ export class OrdersModel {
 
   async create(order: Order): Promise<DataObject> {
     try {
+
       const conn: PoolClient = await Client.connect()
       const sql =
         "INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *"
@@ -38,7 +39,7 @@ export class OrdersModel {
       ])
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -46,6 +47,7 @@ export class OrdersModel {
       }
       return data
     } catch (error) {
+      console.log("Error")
       throw new Error(`Unable to create order. ${error}`)
     }
   }
@@ -58,7 +60,7 @@ export class OrdersModel {
       const result: QueryResult<Order> = await conn.query(sql, [id])
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -89,7 +91,7 @@ export class OrdersModel {
 
       console
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -109,7 +111,7 @@ export class OrdersModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -122,9 +124,7 @@ export class OrdersModel {
   }
 
   async addProducts(
-    order_id: number,
-    product_id: number,
-    quantity: number
+   orderItem : OrderItems
   ): Promise<DataObject> {
     try {
       const conn = await Client.connect()
@@ -132,15 +132,15 @@ export class OrdersModel {
         "INSERT INTO order_items (order_id, product_id, quantity) values ($1, $2, $3) RETURNING *"
 
       const result: QueryResult<OrderItems> = await conn.query(sql, [
-        order_id,
-        product_id,
-        quantity,
+        orderItem.order_id,
+        orderItem.product_id,
+        orderItem.quantity,
       ])
 
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]

@@ -1,4 +1,4 @@
-import { NOT_FOUND, OK } from "http-status-codes"
+import { NO_CONTENT, OK } from "http-status-codes"
 import { PoolClient, QueryResult } from "pg"
 import Client from "../database/database"
 import { DataObject } from "../interfaces/common.interface"
@@ -13,7 +13,7 @@ export class ProductModel {
       connection.release()
 
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0 ? result.rows : { error: "No Records found" },
       }
@@ -26,23 +26,23 @@ export class ProductModel {
   async create(prod: Product): Promise<DataObject> {
     try {
       const conn = await Client.connect()
-      console.log(prod);
+      //console.log(prod);
       const sql =
         "INSERT INTO products (name, price, category, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *"
       const result = await conn.query(sql, [
         prod.name,
         prod.price,
-        prod.category,
+        "default",
         prod.quantity,
         prod.details,
-        prod.rating,
-        prod.image
+        5,
+        prod.avatar
       ])
 
       conn.release()
-
+      console.log
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -62,7 +62,7 @@ export class ProductModel {
       conn.release()
 
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -89,7 +89,7 @@ export class ProductModel {
       conn.release()
 
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -110,7 +110,7 @@ export class ProductModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -141,7 +141,7 @@ export class ProductModel {
 
       conn.release()
       const obj: DataObject = {
-        status: result.rows.length > 0 ? OK : NOT_FOUND,
+        status: result.rows.length > 0 ? OK : NO_CONTENT,
         data:
           result.rows.length > 0
             ? result.rows[0]

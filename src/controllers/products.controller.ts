@@ -1,19 +1,20 @@
 import { Request, Response } from "express"
 import { ProductModel } from "../models/products.model"
 import { Product } from "../interfaces/products.interface"
-import { NOT_FOUND } from "http-status-codes"
+import { NO_CONTENT } from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 
 const model: ProductModel = new ProductModel()
 
 export const index = async (req: Request, res: Response): Promise<void> => {
   try {
-    const products: DataObject = await model.index()
 
+    const products: DataObject = await model.index()
+    
     res.status(products.status)
     res.json(products.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
@@ -25,29 +26,30 @@ export const show = async (req: Request, res: Response): Promise<void> => {
     res.status(product.status)
     res.json(product.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
 
 export const create = async (req: Request, res: Response): Promise<void> => {
+  console.log(req.body)
   const product: Product = {
     name: req.body.name,
     price: (req.body.price as unknown) as number,
     quantity : (req.body.quantity as unknown) as number,
-    category: req.body.category,
     details : req.body.details,
     rating : (req.body.rating as unknown) as number,
-    image: req.body.image
+    avatar: req.body.image
   }
 
+  console.log(product)
   try {
     const newProduct: DataObject = await model.create(product)
     console.log(newProduct)
     res.status(newProduct.status)
     res.json(newProduct.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
@@ -58,7 +60,7 @@ export const destroy = async (req: Request, res: Response): Promise<void> => {
     res.status(deleted.status)
     res.json(deleted.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
@@ -74,7 +76,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
     res.status(updated.status)
     res.json(updated.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
@@ -88,7 +90,7 @@ export const filter = async (req: Request, res: Response): Promise<void> => {
     res.status(prod.status)
     res.json(prod.data)
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }
@@ -100,7 +102,7 @@ export const clean = async (req: Request, res: Response): Promise<void> => {
     res.status(200)
     res.json({ deleted: deleted })
   } catch (error) {
-    res.status(NOT_FOUND)
+    res.status(NO_CONTENT)
     res.json(error)
   }
 }

@@ -13,7 +13,7 @@ import { IsAuthenticated } from "../middlewares/auth.middleware"
 const users_route = (app: express.Application): void => {
   app.post("/users", create)
   app.get("/users", IsAuthenticated, index)
-  app.get("/users/authenticate", authenticate)
+  app.post("/users/authenticate", authenticate)
   app.get("/users/:id", IsAuthenticated, show)
   app.delete("/users/:id", IsAuthenticated, destroy)
 

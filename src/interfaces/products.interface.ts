@@ -5,8 +5,7 @@ export interface Product {
   name: string,
   price: number,
   quantity : number,
-  category: string,
   rating : number,
   details : string,
-  image : string
+  avatar : string
 }
