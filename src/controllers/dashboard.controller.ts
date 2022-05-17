@@ -9,7 +9,7 @@ export const orderItems = async (
   res: Response
 ): Promise<void> => {
   try {
-    const products = await dashboard.orderItems()
+    const products = await dashboard.orderItems(parseInt(_req.params.id))
     res.json(products)
   } catch (error) {
     throw new Error("Unable to find Results. " + error)

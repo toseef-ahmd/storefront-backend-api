@@ -1,47 +1,45 @@
 import { Request, Response } from "express"
 import { ProductModel } from "../models/products.model"
 import { Product } from "../interfaces/products.interface"
-import { NO_CONTENT } from "http-status-codes"
+import { NOT_FOUND, NO_CONTENT } from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
+import products from "../database/seeder"
 
 const model: ProductModel = new ProductModel()
 
+
 export const index = async (req: Request, res: Response): Promise<void> => {
   try {
-
     const products: DataObject = await model.index()
     
     res.status(products.status)
     res.json(products.data)
+    res.end()
   } catch (error) {
-    res.status(NO_CONTENT)
+   
+    res.status(NOT_FOUND)
     res.json(error)
+    res.end()
   }
 }
 
 export const show = async (req: Request, res: Response): Promise<void> => {
   try {
     const product: DataObject = await model.show(req.params.id)
-
+    
     res.status(product.status)
     res.json(product.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    console.log("Failed")
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   console.log(req.body)
-  const product: Product = {
-    name: req.body.name,
-    price: (req.body.price as unknown) as number,
-    quantity : (req.body.quantity as unknown) as number,
-    details : req.body.details,
-    rating : (req.body.rating as unknown) as number,
-    avatar: req.body.image
-  }
-
+  
+  const product : Product = req.body.product
   console.log(product)
   try {
     const newProduct: DataObject = await model.create(product)
@@ -103,6 +101,30 @@ export const clean = async (req: Request, res: Response): Promise<void> => {
     res.json({ deleted: deleted })
   } catch (error) {
     res.status(NO_CONTENT)
+    res.json(error)
+  }
+}
+
+export const load = async (req: Request, res : Response) : Promise<void> => {
+  
+  try {
+    console.log("Load Called")
+    
+    console.log(products)
+    const success : boolean  =  await model.dump(products);
+    if(success) {
+      res.status(200)
+      res.json({ "message": "success" })
+    }
+    else {
+      res.status(404)
+      res.json({ "message": "failed" })
+    }
+
+  } catch (error) {
+    console.log("error")
+    console.log(error)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }

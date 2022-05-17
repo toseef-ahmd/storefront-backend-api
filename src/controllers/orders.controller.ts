@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { NO_CONTENT} from "http-status-codes"
+import { NOT_FOUND} from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 import { Order } from "../interfaces/orders.interface"
 
@@ -13,7 +13,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     res.status(orders.status)
     res.json(orders.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -32,7 +32,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     res.status(newOrder.status)
     res.json(newOrder.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -44,7 +44,7 @@ export const show = async (req: Request, res: Response): Promise<void> => {
     res.status(order.status)
     res.json(order.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -60,7 +60,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
     res.status(order.status)
     res.json(order.data)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -74,7 +74,7 @@ export const destroy = async (req: Request, res: Response): Promise<void> => {
     res.status(deleted.status)
     res.json(deleted)
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }
@@ -107,7 +107,7 @@ export const clean = async (req: Request, res: Response): Promise<void> => {
     res.status(200)
     res.json({ deleted: deleted })
   } catch (error) {
-    res.status(NO_CONTENT)
+    res.status(NOT_FOUND)
     res.json(error)
   }
 }

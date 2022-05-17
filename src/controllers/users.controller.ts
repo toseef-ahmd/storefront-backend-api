@@ -43,8 +43,8 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     const newUser: DataObject = await model.create(user)
 
     const { status, data } = newUser
-
-    const token = await generateToken(data as User) //jwt.sign({ id: _id }, process.env.JWT_SECRET as string)
+    const u : User = data as User;
+    const token = jwt.sign({ id: u.id }, process.env.JWT_SECRET as string)
 
     res.status(status)
     res.json({ token: token })
@@ -97,18 +97,25 @@ export const authenticate = async (
 
     res.status(status)
     if(status==200) {
-      const token = await generateToken(data as User);
-      console.log(token)
+      console.log(status)
+      const u : User = data as User;
+      const token = jwt.sign({ id: u.id }, process.env.JWT_SECRET as string)
+      
+      res.set("Connection", "keep-alive");
       res.json({token: token})
+      
     }
     else {
-      console.log(data)
+      
+      res.set("Connection", "keep-alive");
       res.json(data)
     }
   } catch (error) {
-    console.log("Catch")
     res.status(NOT_FOUND)
+    res.set("Connection", "keep-alive");
     res.json(error)
+    
+    
   }
 }
 

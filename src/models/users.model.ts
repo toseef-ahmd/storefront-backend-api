@@ -4,7 +4,7 @@ import Client from "../database/database"
 import bcrypt from "bcrypt"
 import { User } from "../interfaces/users.interface"
 
-import { NOT_FOUND, OK, UNAUTHORIZED } from "http-status-codes"
+import { NOT_FOUND, OK } from "http-status-codes"
 import { DataObject } from "../interfaces/common.interface"
 
 export class UserModel {
@@ -36,7 +36,7 @@ export class UserModel {
         }
         else {
           const passErr: DataObject = {
-            status: UNAUTHORIZED,
+            status: NOT_FOUND,
             data: "Incorrect Password",
           }
           return passErr
@@ -44,12 +44,17 @@ export class UserModel {
       }
       
       const userErr: DataObject = {
-        status: UNAUTHORIZED,
+        status: NOT_FOUND,
         data: "No User found with this Username",
       }
       return userErr
 
     } catch (error) {
+      const userErr: DataObject = {
+        status: NOT_FOUND,
+        data: "No User found with this Username",
+      }
+      return userErr
       throw new Error(`Not found, ${error}`)
     }
   }

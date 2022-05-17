@@ -3,7 +3,7 @@ import { Order } from "../interfaces/orders.interface"
 import Client from "../database/database"
 import { OrderItems } from "../interfaces/order_items.interface"
 import { DataObject } from "../interfaces/common.interface"
-import { NOT_FOUND, NO_CONTENT, OK } from "http-status-codes"
+import { NOT_FOUND, OK } from "http-status-codes"
 
 export class OrdersModel {
   async index(): Promise<DataObject> {
@@ -15,7 +15,7 @@ export class OrdersModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0 ? result.rows : { error: "No Records found" },
       }
@@ -39,7 +39,7 @@ export class OrdersModel {
       ])
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -60,7 +60,7 @@ export class OrdersModel {
       const result: QueryResult<Order> = await conn.query(sql, [id])
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -91,7 +91,7 @@ export class OrdersModel {
 
       console
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -111,7 +111,7 @@ export class OrdersModel {
       conn.release()
 
       const data: DataObject = {
-        status: result.rows.length > 0 ? OK : NO_CONTENT,
+        status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
           result.rows.length > 0
             ? result.rows[0]
@@ -128,11 +128,11 @@ export class OrdersModel {
    product_id : number,
    quantity : number
   ): Promise<DataObject> {
+    console.log("order item")
     console.log(order_id)
     console.log(product_id)
     console.log(quantity)
     try {
-      
       const conn = await Client.connect()
       const sql = "INSERT INTO order_items (product_id, order_id, quantity) values ($1, $2, $3) RETURNING *"
 
@@ -143,8 +143,6 @@ export class OrdersModel {
       ])
 
       conn.release()
-      console.log("result")
-      console.log(result)
 
       const data: DataObject = {
         status: result.rows.length > 0 ? OK : NOT_FOUND,
@@ -156,7 +154,10 @@ export class OrdersModel {
       return data
     } catch (error) {
       console.log("error")
+      console.log(error)
+      
       throw new Error(`Cannot add products to order ${error}`)
+      
     }
   }
 
