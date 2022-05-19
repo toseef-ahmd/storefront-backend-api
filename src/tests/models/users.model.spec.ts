@@ -29,7 +29,7 @@ describe("Users Model", () => {
       username: "tauseef123",
       firstname: "tauseef",
       lastname: "ahmed",
-      password_digest: "password123",
+      password: "password123",
     })
 
     expect(result.data).toEqual({
