@@ -27,15 +27,21 @@ describe("Product Model", () => {
   it("Should add a Product", async () => {
     const result: DataObject = await model.create({
       name: "Harry Potter",
-      price: 100,
-      category: "Books",
+      price: 10,
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
 
     expect(result.data).toEqual({
       id: 1,
       name: "Harry Potter",
-      price: 100 as unknown as number,
-      category: "Books",
+      price: 10,
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
   })
 
@@ -46,8 +52,11 @@ describe("Product Model", () => {
       {
         id: 1,
         name: "Harry Potter",
-        price: 100 as unknown as number,
-        category: "Books",
+        price: 10,
+        quantity: 10,
+        details: "This is a harry potter book.",
+        rating: 5,
+        avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
       },
     ])
   })
@@ -57,8 +66,11 @@ describe("Product Model", () => {
     expect(result.data).toEqual({
       id: 1,
       name: "Harry Potter",
-      price: 100 as unknown as number,
-      category: "Books",
+      price: 10,
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
   })
 
@@ -73,8 +85,11 @@ describe("Product Model", () => {
     expect(result.data).toEqual({
       id: 1,
       name: "Updated Name",
-      price: 200 as unknown as number,
-      category: "Books",
+      price: 200,
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
   })
 
@@ -85,7 +100,10 @@ describe("Product Model", () => {
       id: 1,
       name: "Updated Name",
       price: 200,
-      category: "Books",
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
   })
 })

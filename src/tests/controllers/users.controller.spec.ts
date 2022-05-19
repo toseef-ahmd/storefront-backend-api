@@ -1,25 +1,24 @@
 import supertest from "supertest"
 import { app } from "../../server"
-import { User } from "../../interfaces/users.interface"
 const request = supertest(app)
 
 describe("Users Controller", () => {
-  const user: User = {
+  const user = {
     firstname: "tauseef",
     lastname: "ahmed",
     username: "tasueefAhmed",
-    password_digest: "hello123",
+    password: "hello123",
   }
 
   let _token: string // = process.env.token as string;
 
   beforeAll(async () => {
     await request.delete("/users")
-    const user: User = {
+    const user = {
       firstname: "tauseef",
       lastname: "Ahmed",
       username: "tasueefAhmed",
-      password_digest: "hello123",
+      password: "hello123",
     }
 
     const result = await request.post("/users").send(user)

@@ -37,12 +37,19 @@ export const show = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body)
-  
-  const product : Product = req.body.product
+  const product : Product = {
+    name: req.body.name,
+    price: req.body.price,
+    quantity: req.body.quantity,
+    details: req.body.details,
+    rating: req.body.rating,
+    avatar: req.body.avatar
+  }
+  req.body.product
   console.log(product)
   try {
     const newProduct: DataObject = await model.create(product)
+    console.log("newProduct")
     console.log(newProduct)
     res.status(newProduct.status)
     res.json(newProduct.data)

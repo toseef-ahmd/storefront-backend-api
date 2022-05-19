@@ -1,25 +1,28 @@
 import supertest from "supertest"
 import { app } from "../../server"
 import { Product } from "../../interfaces/products.interface"
-import { User } from "../../interfaces/users.interface"
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app)
 
 describe("Products Controller", () => {
   const product: Product = {
+    
     name: "Harry Potter",
-    price: 100,
-    category: "Books",
+    price: 10,
+    quantity: 10,
+    details: "This is a harry potter book.",
+    rating: 5,
+    avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
   }
 
   let _token: string
 
   beforeAll(async () => {
-    const user: User = {
+    const user = {
       firstname: "tauseef",
       lastname: "Ahmed",
       username: "tasueefAhmed",
-      password_digest: "hello123",
+      password: "hello123",
     }
 
     const result = await request.post("/users").send(user)
@@ -65,7 +68,7 @@ describe("Products Controller", () => {
 
   it("Should Update the Product", async () => {
     const response = await request
-      .put("/products/1")
+      .patch("/products/1")
       .send({
         name: "Updated Name",
       })
@@ -85,22 +88,6 @@ describe("Products Controller", () => {
   })
 
   it("Should Return error if Auth Token is missing", async() => {
-    await request
-      .post("/products")
-      .send(product)
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
-
-    await request
-      .put("/products/1")
-      .send({
-        name: "Updated name",
-        price: 200,
-      })
-      .then((res) => {
-        expect(res.status).toBe(405)
-      })
 
     await request.delete("/products/1").then((res) => {
       expect(res.status).toBe(405)

@@ -3,7 +3,6 @@ import { PoolClient, QueryResult } from "pg"
 import Client from "../database/database"
 import { DataObject } from "../interfaces/common.interface"
 import { Product } from "../interfaces/products.interface"
-import { format } from 'node-pg-format';
 
 export class ProductModel {
   async index(): Promise<DataObject> {
@@ -26,22 +25,23 @@ export class ProductModel {
 
   async create(prod: Product): Promise<DataObject> {
     try {
+
       const conn = await Client.connect()
-      //console.log(prod);
+      console.log("prod");
+      console.log(prod);
       const sql =
-        "INSERT INTO products (name, price, category, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *"
+        "INSERT INTO products (name, price, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"
       const result = await conn.query(sql, [
         prod.name,
         prod.price,
-        "default",
         prod.quantity,
         prod.details,
-        5,
+        prod.rating,
         prod.avatar
       ])
 
       conn.release()
-      console.log
+
       const obj: DataObject = {
         status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:

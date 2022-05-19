@@ -109,6 +109,7 @@ export const authenticate = async (
       
       res.set("Connection", "keep-alive");
       res.json(data)
+     
     }
   } catch (error) {
     res.status(NOT_FOUND)

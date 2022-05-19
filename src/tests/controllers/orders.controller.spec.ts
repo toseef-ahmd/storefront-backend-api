@@ -1,6 +1,6 @@
 import supertest from "supertest"
 import { app } from "../../server"
-import { User } from "../../interfaces/users.interface"
+//import { User } from "../../interfaces/users.interface"
 import { Order } from "../../interfaces/orders.interface"
 import { Product } from "../../interfaces/products.interface"
 
@@ -9,22 +9,26 @@ const request = supertest(app)
 const _token: string = process.env.token as string
 
 describe("Orders Controller", () => {
-  const user: User = {
+  const user = {
     firstname: "tauseef",
     lastname: "ahmed",
     username: "tasueefAhmed",
-    password_digest: "hello123",
+    password: "hello123",
   }
 
-  const order: Order = {
-    user_id: 1,
+  const order = {
+    user_id: "1",
     status: "active",
   }
 
   const product: Product = {
+    
     name: "Harry Potter",
-    price: 100,
-    category: "Books",
+    price: 10,
+    quantity: 10,
+    details: "This is a harry potter book.",
+    rating: 5,
+    avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
   }
 
   beforeAll(async () => {
@@ -59,6 +63,7 @@ describe("Orders Controller", () => {
   })
 
   it("Gets Orders List", async () => {
+    console.log(_token)
     const response = await request
       .get("/orders")
       .set("Authorization", "Bearer " + _token)

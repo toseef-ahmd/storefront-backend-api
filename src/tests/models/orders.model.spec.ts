@@ -18,8 +18,11 @@ describe("Orders Model", () => {
 
     await prodModel.create({
       name: "Harry Potter",
-      price: 100,
-      category: "Books",
+      price: 10,
+      quantity: 10,
+      details: "This is a harry potter book.",
+      rating: 5,
+      avatar: "https://res.cloudinary.com/atkora/image/upload/v1650995531/29056083._SY475__qwmwfw.jpg"
     })
   })
 
