@@ -2,8 +2,8 @@ import { Product } from "../interfaces/products.interface"
 
 const products : Product[] = [
     {
-        name     :   "Harry Potter",
-        price    :   10,
+        name     : "Harry Potter",
+        price    : 10,
         quantity : 10,
         details  : "This is a harry potter book.",
         rating   : 5,
@@ -13,7 +13,7 @@ const products : Product[] = [
         name     : "Galaxy S22 Ultra",
         price    : 1050,
         quantity : 5,
-        details  : "This is a Samsung Galaxy S22 Ultra.",
+        details  : "This is Galaxy S22 Ultra.",
         rating   : 5,
         avatar   : "https://res.cloudinary.com/atkora/image/upload/v1650995529/download_p0lrj7.jpg"
     },

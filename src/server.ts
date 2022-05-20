@@ -8,7 +8,7 @@ const port: number = process.env.ROOT_APP_PORT as unknown as number
 
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "http://localhost:4200"],
   optionsSuccessStatus: 200,
 }
 
