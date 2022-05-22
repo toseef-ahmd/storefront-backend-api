@@ -20,6 +20,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   try {
+   
     const _order: Order = {
      user_id : req.body.user_id,
      status : req.body.status
