@@ -4,7 +4,7 @@ import cors from 'cors'
 import { AppRoutes } from "./routes/index.route"
 
 const app: express.Application = express()
-const port: number = process.env.ROOT_APP_PORT as unknown as number
+const port: number = process.env.PORT as unknown as number || 8000
 
 
 const corsOptions = {
