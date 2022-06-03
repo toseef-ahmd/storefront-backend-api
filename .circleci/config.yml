@@ -6,13 +6,13 @@ jobs:
       image: ubuntu-2004:202201-02
     steps:
       - checkout
+      - run: npm install typescript
       - run:
           name: Installing AWS CLI
           command: |
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: npm install typescript
       - run: npm install && npm run build
       - persist_to_workspace:
           root: .
