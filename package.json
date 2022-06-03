@@ -15,6 +15,7 @@
     "jasmine": "jasmine",
     "tsc": "tsc",
     "build": "npx tsc",
+    "deploy": "eb deploy",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write src/**/*.ts"
   },
