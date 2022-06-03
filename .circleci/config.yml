@@ -6,14 +6,14 @@ jobs:
       image: ubuntu-2004:202201-02
     steps:
       - checkout
-      - run: npm install typescript
+      - run: yarn add typescript
       - run:
           name: Installing AWS CLI
           command: |
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: npm install && npm run build
+      - run: yarn && yarn build
       - persist_to_workspace:
           root: .
           paths:
@@ -25,7 +25,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: npm run test
+      - run: yarn test
       - persist_to_workspace:
           root: .
           paths:
@@ -37,9 +37,6 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: aws s3 sync ./dist/store-frontend s3://store-frontent
-    
-
 workflows:
   build_test_deploy:
     jobs:
