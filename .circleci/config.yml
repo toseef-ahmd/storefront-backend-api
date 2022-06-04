@@ -8,6 +8,7 @@ jobs:
     steps:
       - checkout
       - eb/setup
+      - run: yarn
       - run: yarn build
       - run:
           command: |
