@@ -15,8 +15,8 @@
     },
     "prod": {
       "driver": "pg",
-      "host": "store-db.cihxcyrkhput.us-east-1.rds.amazonaws.com",
-      "database": "store-db",
+      "host": "http://storefront-db.cihxcyrkhput.us-east-1.rds.amazonaws.com",
+      "database": "storefront",
       "user": "postgres",
       "password": "postgres"
     }
