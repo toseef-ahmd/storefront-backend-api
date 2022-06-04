@@ -26,6 +26,9 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
+      - run:
+          name: Wait for Database Port
+          command: while ! nc -z 127.0.0.1 5432 ; do sleep 1 ; done
       - run: npm run migrate
       - run: yarn deploy
 workflows:
