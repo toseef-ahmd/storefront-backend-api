@@ -12,13 +12,5 @@
       "database": "storefront_test",
       "user": "test_user",
       "password": "password123"
-    },
-    "prod": {
-      "driver": "pg",
-      "host": "",
-      "database": "storefront_db",
-      "user": "tauseef_ahmed",
-      "password": "password123"
-    },
-
+    }
   }
