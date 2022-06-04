@@ -1,6 +1,7 @@
 version: '2.1'
 orbs:
   eb: circleci/aws-elastic-beanstalk@1.0.0
+  node: circleci/node@5.0.2
 jobs:
   eb-demo:
     docker:
