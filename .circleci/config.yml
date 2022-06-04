@@ -14,7 +14,7 @@ jobs:
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: npm install && npm run build
+      - run: yarn && yarn build
       - persist_to_workspace:
           root: .
           paths:
@@ -27,7 +27,7 @@ jobs:
           at: .
       - checkout
       - run: npm run migrate
-      - run: npm run deploy
+      - run: yarn deploy
 workflows:
   build_test_deploy:
     jobs:
