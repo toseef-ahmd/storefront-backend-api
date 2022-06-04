@@ -6,7 +6,7 @@ jobs:
       image: ubuntu-2004:202201-02
     steps:
       - checkout
-      - run: yarn add typescript
+      - run: npx -p typescript tsc --init
       - run:
           name: Installing AWS CLI
           command: |
