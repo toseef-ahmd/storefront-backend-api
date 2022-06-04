@@ -35,6 +35,7 @@ const Client: Pool = new Pool({
           ? (POSTGRES_PASSWORD_DEV as string)
           : APP_ENV === "prod" ? (POSTGRES_PASSWORD_PROD as string)
           : (POSTGRES_TEST_PASSWORD as string),
+  port: 5432
 })
 
 //console.log("Client: ", Client)

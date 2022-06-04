@@ -15,7 +15,8 @@
     "jasmine": "jasmine",
     "tsc": "tsc",
     "build": "npx tsc",
-    "deploy": "APP_ENV=prod && db-migrate up && eb deploy",
+    "migrate": "set APP_ENV=prod && db-migrate store-db --config ./database.json && db-migrate --env prod up",
+    "deploy" : "eb deploy",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write src/**/*.ts"
   },

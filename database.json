@@ -12,5 +12,12 @@
       "database": "storefront_test",
       "user": "test_user",
       "password": "password123"
+    },
+    "prod": {
+      "driver": "pg",
+      "host": "store-db.cihxcyrkhput.us-east-1.rds.amazonaws.com",
+      "database": "store-db",
+      "user": "postgres",
+      "password": "postgres"
     }
   }
