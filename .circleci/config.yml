@@ -8,8 +8,8 @@ jobs:
     steps:
       - checkout
       - eb/setup
-      - run: yarn
-      - run: yarn build
+      - run: npm install
+      - run: npm run build
       - run:
           command: |
             eb deploy Storebackendapi-env-1
