@@ -25,6 +25,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
+      - run: yarn deploy
 workflows:
   build_test_deploy:
     jobs:
