@@ -9,14 +9,15 @@ const model: ProductModel = new ProductModel()
 
 
 export const index = async (req: Request, res: Response): Promise<void> => {
+  console.log("products")
   try {
     const products: DataObject = await model.index()
-    
+    console.log(products)
     res.status(products.status)
     res.json(products.data)
     res.end()
   } catch (error) {
-   
+    console.log("failed")
     res.status(NOT_FOUND)
     res.json(error)
     res.end()

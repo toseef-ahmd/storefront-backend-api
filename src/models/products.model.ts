@@ -6,6 +6,7 @@ import { Product } from "../interfaces/products.interface"
 
 export class ProductModel {
   async index(): Promise<DataObject> {
+    console.log("products model")
     try {
       const connection = await Client.connect()
       const sql = "SELECT * FROM products"
@@ -19,18 +20,19 @@ export class ProductModel {
       }
       return obj
     } catch (error) {
+      console.log(error)
       throw new Error(`Cannot get products ${error}`)
     }
   }
 
   async create(prod: Product): Promise<DataObject> {
     try {
-
-      const conn = await Client.connect()
-      console.log("prod");
+      console.log("prod model create")
       console.log(prod);
+      const conn = await Client.connect()
+      
       const sql =
-        "INSERT INTO products (name, price, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"
+        "INSERT INTO products (product, price, quantity, details, rating, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *"
       const result = await conn.query(sql, [
         prod.name,
         prod.price,
@@ -41,7 +43,7 @@ export class ProductModel {
       ])
 
       conn.release()
-
+      
       const obj: DataObject = {
         status: result.rows.length > 0 ? OK : NOT_FOUND,
         data:
@@ -51,6 +53,8 @@ export class ProductModel {
       }
       return obj
     } catch (error) {
+      console.log("model error")
+      console.log(error)
       throw new Error(`Cannot get product ${error}`)
     }
   }

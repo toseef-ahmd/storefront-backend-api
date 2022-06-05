@@ -5,8 +5,9 @@ import { AppRoutes } from "./routes/index.route"
 
 const app: express.Application = express()
 const port: number = process.env.PORT as unknown as number || 8000
+const env: string = process.env.APP_ENV as unknown as string
 
-
+console.log(env)
 const corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200,
