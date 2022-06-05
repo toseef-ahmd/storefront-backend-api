@@ -19,23 +19,32 @@ const {
 
 } = process.env
 
-const Client: Pool = new Pool({
-  host: APP_ENV === "dev" ? POSTGRES_HOST_DEV : POSTGRES_HOST_PROD,
+const host : string = APP_ENV === "dev" ? (POSTGRES_HOST_DEV as string) : (POSTGRES_HOST_PROD as string);
 
-  database: APP_ENV === "dev" ? POSTGRES_DB_DEV as string
-          : APP_ENV === "prod" ? (POSTGRES_DB_PROD as string) 
-          : (POSTGRES_TEST_DB as string),
+const database: string =  APP_ENV === "dev" ? POSTGRES_DB_DEV as string
+: APP_ENV === "prod" ? (POSTGRES_DB_PROD as string) 
+: (POSTGRES_TEST_DB as string)
 
-  user: APP_ENV === "dev"
+const user: string =  APP_ENV === "dev"
           ? (POSTGRES_USER_DEV as string)
           : APP_ENV === "prod" ? (POSTGRES_USER_PROD as string)
-          : (POSTGRES_TEST_USER as string),
+          : (POSTGRES_TEST_USER as string)
 
-  password: APP_ENV === "dev"
+const password: string = APP_ENV === "dev"
           ? (POSTGRES_PASSWORD_DEV as string)
           : APP_ENV === "prod" ? (POSTGRES_PASSWORD_PROD as string)
-          : (POSTGRES_TEST_PASSWORD as string),
-  port: 5432
+          : (POSTGRES_TEST_PASSWORD as string)
+
+console.log(host)
+console.log(database)
+console.log(user)
+console.log(password)
+
+const Client: Pool = new Pool({
+  host: host,
+  database: database,
+  user: user,
+  password: password
 })
 
 //console.log("Client: ", Client)
